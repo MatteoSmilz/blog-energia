@@ -1,6 +1,7 @@
 ---
 import 'katex/dist/katex.min.css';
 import '../styles/global.css';
+import { Font } from 'astro:assets';
 import { url } from '../lib/url';
 
 interface Props {
@@ -14,6 +15,8 @@ const { titolo } = Astro.props;
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Font cssVariable="--font-bricolage" preload />
+        <Font cssVariable="--font-literata" />
         <link rel="icon" href={url('favicon.svg')} />
         <title>{titolo}</title>
     </head>

@@ -23,8 +23,8 @@
     --serie: var(--accento);
 
     /* Caratteri */
-    --font-titoli: 'Bricolage Grotesque', system-ui, sans-serif;
-    --font-testo: 'Literata', Georgia, 'Times New Roman', serif;
+    --font-titoli: var(--font-bricolage);
+    --font-testo: var(--font-literata);
     --font-codice: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
 
     /* Dimensioni del testo */
