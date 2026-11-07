@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+.venv/
+src/data/generati/
+__pycache__/
+.ipynb_checkpoints/

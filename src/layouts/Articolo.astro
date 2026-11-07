@@ -1,0 +1,21 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+    titolo: string;
+    sottotitolo?: string;
+    data: Date;
+}
+const { titolo, sottotitolo, data } = Astro.props;
+---
+
+<Base titolo={titolo}>
+    <article>
+        <h1>{titolo}</h1>
+        {sottotitolo && <p class="sottotitolo">{sottotitolo}</p>}
+        <time datetime={data.toISOString()}>
+            {data.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+        </time>
+        <slot />
+    </article>
+</Base>

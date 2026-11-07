@@ -1,0 +1,30 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/global.css';
+import { url } from '../lib/url';
+
+interface Props {
+    titolo: string;
+}
+const { titolo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="it">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href={url('favicon.svg')} />
+        <title>{titolo}</title>
+    </head>
+    <body>
+        <header>
+            <a href={url()}>Home</a>
+            <a href={url('articoli')}>Articoli</a>
+            <a href={url('relazioni')}>Relazioni</a>
+        </header>
+        <main>
+            <slot />
+        </main>
+    </body>
+</html>
