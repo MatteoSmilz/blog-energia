@@ -1,0 +1,61 @@
+---
+import { getCollection, render } from 'astro:content';
+import Articolo from '../../layouts/Articolo.astro';
+import Anteprima from '../../components/Anteprima.astro';
+import { getArticoli, getQuinte } from '../../lib/articoli';
+import { url } from '../../lib/url';
+
+export async function getStaticPaths() {
+    const quinte = await getQuinte();
+    return quinte.map((quinta) => ({
+        params: { slug: quinta.id },
+        props: { quinta },
+    }));
+}
+
+const { quinta } = Astro.props;
+const { Content } = await render(quinta);
+const { titolo, pubblicato, copertina, articoli: riferimenti } = quinta.data;
+
+const esistenti = new Set((await getCollection('articoli')).map((a) => a.id));
+for (const rif of riferimenti) {
+    if (!esistenti.has(rif.id)) {
+        throw new Error(`"${quinta.id}" cita l'articolo "${rif.id}", che non esiste.`);
+    }
+}
+
+const pubblicati = await getArticoli();
+const collegati = pubblicati.filter((a) => riferimenti.some((rif) => rif.id === a.id));
+---
+
+<Articolo titolo={titolo} pubblicato={pubblicato} copertina={copertina}>
+    <Content />
+    {collegati.length > 0 && (
+        <section class="collegati">
+            <h2>Gli articoli</h2>
+            <div class="griglia">
+                {collegati.map((a) => (
+                    <Anteprima
+                        titolo={a.data.titolo}
+                        href={url(`articoli/${a.id}`)}
+                        pubblicato={a.data.pubblicato}
+                        descrizione={a.data.descrizione}
+                        copertina={a.data.copertina}
+                    />
+                ))}
+            </div>
+        </section>
+    )}
+</Articolo>
+
+<style>
+    .collegati {
+        margin-top: 4rem;
+    }
+
+    .griglia {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    }
+</style>

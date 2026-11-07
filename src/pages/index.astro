@@ -17,6 +17,7 @@ const altri = articoli.filter((a) => a !== inEvidenza);
             href={url(`articoli/${inEvidenza.id}`)}
             pubblicato={inEvidenza.data.pubblicato}
             descrizione={inEvidenza.data.descrizione}
+            copertina={inEvidenza.data.copertina}
         />
     )}
     {altri.map((a) => (

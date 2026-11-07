@@ -1,4 +1,4 @@
-import { defineCollection, type SchemaContext } from 'astro:content';
+import { defineCollection, reference, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { NOMI_SERIE } from './lib/serie';
@@ -44,4 +44,17 @@ const relazioni = defineCollection({
         }),
 });
 
-export const collections = { articoli, relazioni };
+const quinte = defineCollection({
+    loader: glob({ pattern: '**/*.mdx', base: './src/content/quinte' }),
+    schema: (contesto) =>
+        z.object({
+            titolo: z.string(),
+            descrizione: z.string().max(200),
+            pubblicato: z.coerce.date(),
+            articoli: z.array(reference('articoli')).min(1),
+            copertina: schemaCopertina(contesto).optional(),
+            bozza: z.boolean().default(false),
+        }),
+});
+
+export const collections = { articoli, relazioni, quinte };

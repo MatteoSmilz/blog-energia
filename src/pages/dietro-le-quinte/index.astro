@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import Anteprima from '../../components/Anteprima.astro';
+import { getQuinte } from '../../lib/articoli';
+import { url } from '../../lib/url';
+
+const quinte = await getQuinte();
+---
+
+<Base titolo="Dietro le quinte">
+    <h1>Dietro le quinte</h1>
+    {quinte.length === 0 ? (
+        <p>Le prime pagine arriveranno insieme alle simulazioni.</p>
+    ) : (
+        <div class="griglia">
+            {quinte.map((q) => (
+                <Anteprima
+                    titolo={q.data.titolo}
+                    href={url(`dietro-le-quinte/${q.id}`)}
+                    pubblicato={q.data.pubblicato}
+                    descrizione={q.data.descrizione}
+                    copertina={q.data.copertina}
+                />
+            ))}
+        </div>
+    )}
+</Base>
+
+<style>
+    .griglia {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    }
+</style>

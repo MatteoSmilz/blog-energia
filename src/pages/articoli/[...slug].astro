@@ -1,7 +1,8 @@
 ---
 import { render } from 'astro:content';
 import Articolo from '../../layouts/Articolo.astro';
-import { getArticoli } from '../../lib/articoli';
+import { getArticoli, getQuintePerArticolo } from '../../lib/articoli';
+import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
     const articoli = await getArticoli();
@@ -13,9 +14,33 @@ export async function getStaticPaths() {
 
 const { articolo } = Astro.props;
 const { Content } = await render(articolo);
+const quinte = await getQuintePerArticolo(articolo.id);
 const { titolo, sottotitolo, pubblicato, copertina } = articolo.data;
 ---
 
 <Articolo titolo={titolo} sottotitolo={sottotitolo} pubblicato={pubblicato} copertina={copertina}>
     <Content />
+    {quinte.length > 0 && (
+        <aside class="quinte">
+            <h2>Dietro le quinte</h2>
+            <ul>
+                {quinte.map((q) => (
+                    <li><a href={url(`dietro-le-quinte/${q.id}`)}>{q.data.titolo}</a></li>
+                ))}
+            </ul>
+        </aside>
+    )}
 </Articolo>
+
+<style>
+    .quinte {
+        margin-top: 4rem;
+        padding: 1.5rem 2rem;
+        border: 1px solid var(--bordo);
+        border-radius: 0.75rem;
+    }
+
+    .quinte h2 {
+        margin-top: 0;
+    }
+</style>
