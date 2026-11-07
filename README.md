@@ -6,7 +6,7 @@ A science communication blog about how energy is produced in nature and technolo
 
 This is a school project for a Natural Sciences course.
 
-**Website:** https://yourusername.github.io/blog-energia/
+**Website:** https://matteosmilz.github.io/blog-energia/
 
 ## Stack
 
@@ -34,7 +34,7 @@ notebooks/              explorations and prototypes
 Requirements: Node.js 26 and Python 3.
 
 ```bash
-git clone https://github.com/yourusername/blog-energia.git
+git clone https://github.com/matteosmilz/blog-energia.git
 cd blog-energia
 npm ci
 python -m venv .venv

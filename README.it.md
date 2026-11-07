@@ -6,7 +6,7 @@ Blog di divulgazione scientifica sulla produzione di energia in natura e nella t
 
 Il progetto è un lavoro scolastico per il corso di Scienze Naturali.
 
-**Sito:** https://tuoutente.github.io/blog-energia/
+**Sito:** https://matteosmilz.github.io/blog-energia/
 
 ## Stack
 
@@ -34,7 +34,7 @@ notebooks/              esplorazioni e prototipi
 Requisiti: Node.js 26 e Python 3.
 
 ```bash
-git clone https://github.com/tuoutente/blog-energia.git
+git clone https://github.com/matteosmilz/blog-energia.git
 cd blog-energia
 npm ci
 python -m venv .venv
