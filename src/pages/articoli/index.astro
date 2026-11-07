@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Anteprima from '../../components/Anteprima.astro';
+import { SERIE, NOMI_SERIE } from '../../lib/serie';
+import { url } from '../../lib/url';
+
+const articoli = (await getCollection('articoli', ({ data }) => !data.bozza))
+    .sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
+
+const gruppi = NOMI_SERIE
+    .map((serie) => ({ serie, articoli: articoli.filter((a) => a.data.serie === serie) }))
+    .filter((gruppo) => gruppo.articoli.length > 0);
+---
+
+<Base titolo="Articoli">
+    <h1>Articoli</h1>
+    {gruppi.map(({ serie, articoli }) => (
+        <section>
+            <h2>{SERIE[serie].nome}</h2>
+            <p class="descrizione">{SERIE[serie].descrizione}</p>
+            <div class="griglia">
+                {articoli.map((a) => (
+                    <Anteprima
+                        titolo={a.data.titolo}
+                        href={url(`articoli/${a.id}`)}
+                        data={a.data.data}
+                        descrizione={a.data.sottotitolo}
+                    />
+                ))}
+            </div>
+        </section>
+    ))}
+</Base>
+
+<style>
+    section {
+        margin-top: 3rem;
+    }
+
+    .descrizione {
+        color: var(--testo-tenue);
+    }
+
+    .griglia {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    }
+</style>

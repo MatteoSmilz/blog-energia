@@ -1,0 +1,69 @@
+---
+interface Props {
+    src: string;
+}
+const { src } = Astro.props;
+---
+
+<div class="pdf-viewer" data-src={src}>
+    <a class="scarica" href={src} download>Scarica PDF</a>
+    <div class="pagine"></div>
+</div>
+
+<script>
+    import * as pdfjsLib from 'pdfjs-dist';
+    import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+
+    async function disegna(viewer: HTMLElement) {
+        const src = viewer.dataset.src!;
+        const contenitore = viewer.querySelector<HTMLElement>('.pagine')!;
+
+        try {
+            const pdf = await pdfjsLib.getDocument(src).promise;
+            const larghezza = contenitore.clientWidth || 800;
+            const dpr = window.devicePixelRatio || 1;
+
+            for (let n = 1; n <= pdf.numPages; n++) {
+                const pagina = await pdf.getPage(n);
+                const base = pagina.getViewport({ scale: 1 });
+                const viewport = pagina.getViewport({ scale: (larghezza / base.width) * dpr });
+
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                contenitore.appendChild(canvas);
+
+                await pagina.render({
+                    canvasContext: canvas.getContext('2d')!,
+                    viewport,
+                }).promise;
+            }
+        } catch (errore) {
+            console.error(errore);
+            contenitore.textContent = 'Non è stato possibile mostrare il PDF. Puoi scaricarlo dal link qui sopra.';
+        }
+    }
+
+    document.querySelectorAll<HTMLElement>('.pdf-viewer').forEach(disegna);
+</script>
+
+<style>
+    .pdf-viewer {
+        margin: 2rem 0;
+    }
+
+    .scarica {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: var(--accento);
+    }
+
+    .pagine :global(canvas) {
+        display: block;
+        width: 100%;
+        margin: 1.5rem 0;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    }
+</style>

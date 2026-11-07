@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Anteprima from '../../components/Anteprima.astro';
+import { url } from '../../lib/url';
+
+const relazioni = (await getCollection('relazioni', ({ data }) => !data.bozza))
+    .sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
+---
+
+<Base titolo="Relazioni di laboratorio">
+    <h1>Relazioni di laboratorio</h1>
+    {relazioni.length === 0 ? (
+        <p>Le prime relazioni arriveranno presto.</p>
+    ) : (
+        <div class="griglia">
+            {relazioni.map((r) => (
+                <Anteprima titolo={r.data.titolo} href={url(`relazioni/${r.id}`)} data={r.data.data} />
+            ))}
+        </div>
+    )}
+</Base>
+
+<style>
+    .griglia {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    }
+</style>

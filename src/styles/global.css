@@ -3,6 +3,8 @@
     --sfondo: #fdfdfb;
     --accento: #c2410c;
     --larghezza-testo: 42rem;
+    --testo-tenue: #6b6b6b;
+    --bordo: #e5e3dc;
 }
 
 body {

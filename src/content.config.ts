@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { NOMI_SERIE } from './lib/serie';
 
 const articoli = defineCollection({
     loader: glob({ pattern: '**/*.mdx', base: './src/content/articoli' }),
@@ -7,7 +8,7 @@ const articoli = defineCollection({
         titolo: z.string(),
         sottotitolo: z.string().optional(),
         data: z.coerce.date(),
-        serie: z.enum(['cellulare', 'terrestre', 'cosmica']),
+        serie: z.enum(NOMI_SERIE),
         tag: z.array(z.string()).default([]),
         bozza: z.boolean().default(false),
     }),
