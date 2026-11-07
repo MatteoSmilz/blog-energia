@@ -1,43 +1,67 @@
-# Astro Starter Kit: Minimal
+# Le centrali della natura
 
-```sh
-npm create astro@latest -- --template minimal
+**English** | [Italiano](README.it.md)
+
+A science communication blog about how energy is produced in nature and technology: from cellular respiration in mitochondria to nuclear fusion in stars. Articles are written in Italian and come with interactive simulations built from scratch.
+
+This is a school project for a Natural Sciences course.
+
+**Website:** https://yourusername.github.io/blog-energia/
+
+## Stack
+
+- [Astro](https://astro.build) with MDX for pages and articles
+- Svelte and Canvas for interactive simulations
+- KaTeX for equations, BibTeX for references
+- Python (NumPy, SciPy, pandas) for lab data analysis and reference models of the simulations
+- Vitest for testing, Pagefind for search
+- GitHub Actions and GitHub Pages for deployment
+
+## Structure
+
+```
+src/content/articoli/   articles (MDX)
+src/content/relazioni/  lab reports
+src/sim/                simulations (physics engine, tests, UI)
+src/components/         reusable components
+python/                 data analysis and reference models
+dati-grezzi/            raw lab measurements
+notebooks/              explorations and prototypes
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Running locally
 
-## 🚀 Project Structure
+Requirements: Node.js 26 and Python 3.
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+git clone https://github.com/yourusername/blog-energia.git
+cd blog-energia
+npm ci
+python -m venv .venv
+source .venv/bin/activate
+pip install -r python/requirements-dev.txt
+npm run dev
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+The site is then available at http://localhost:4321/blog-energia/.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Commands
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | development server with hot reload |
+| `npm run dati` | regenerate data produced by the Python scripts |
+| `npm test` | run the simulation tests |
+| `npm run build` | build the static site into `dist/` |
+| `npm run preview` | preview the production build |
 
-## 🧞 Commands
+## License
 
-All commands are run from the root of the project, from a terminal:
+- **Code**: [MIT](LICENSE)
+- **Content** (articles, reports, original images and data): [CC BY 4.0](LICENSE-CONTENT.md)
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Third-party images and materials keep their own licenses, as stated in the credits of each page.
 
-## 👀 Want to learn more?
+## Contributing
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+See [CONTRIBUTING.md](CONTRIBUTING.md).

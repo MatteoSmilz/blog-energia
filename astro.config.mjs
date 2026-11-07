@@ -7,7 +7,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeCitation from 'rehype-citation';
 
 export default defineConfig({
-    site: 'https://tuoutente.github.io',
+    site: 'https://matteosmilz.github.io',
     base: '/blog-energia',
     integrations: [mdx(), svelte()],
     markdown: {
