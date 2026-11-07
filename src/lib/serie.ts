@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
 
-interface InfoSerie {
+export interface InfoSerie {
     nome: string;
     descrizione: string;
     copertina?: ImageMetadata;

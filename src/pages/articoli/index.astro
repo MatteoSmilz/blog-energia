@@ -15,7 +15,7 @@ const gruppi = NOMI_SERIE
     <h1>Articoli</h1>
     {gruppi.map(({ serie, articoli }) => (
         <section>
-            <h2>{SERIE[serie].nome}</h2>
+            <h2><a href={url(`serie/${serie}`)}>{SERIE[serie].nome}</a></h2>
             <p class="descrizione">{SERIE[serie].descrizione}</p>
             <div class="griglia">
                 {articoli.map((a) => (

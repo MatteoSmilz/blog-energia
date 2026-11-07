@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Anteprima from '../../components/Anteprima.astro';
+import { SERIE, NOMI_SERIE, type InfoSerie } from '../../lib/serie';
+import { getArticoli } from '../../lib/articoli';
+import { url } from '../../lib/url';
+
+export function getStaticPaths() {
+    return NOMI_SERIE.map((serie) => ({ params: { serie }, props: { serie } }));
+}
+
+const { serie } = Astro.props;
+const info: InfoSerie = SERIE[serie];
+const articoli = (await getArticoli()).filter((a) => a.data.serie === serie).reverse();
+---
+
+<Base titolo={info.nome}>
+    {info.copertina && (
+        <Image src={info.copertina} alt="" widths={[800, 1600]} sizes="100vw" loading="eager" class="copertina" />
+    )}
+    <h1>{info.nome}</h1>
+    <p class="descrizione">{info.descrizione}</p>
+
+    {articoli.length === 0 ? (
+        <p>I primi articoli di questa serie sono in arrivo.</p>
+    ) : (
+        <ol class="percorso">
+            {articoli.map((a) => (
+                <li>
+                    <Anteprima
+                        titolo={a.data.titolo}
+                        href={url(`articoli/${a.id}`)}
+                        pubblicato={a.data.pubblicato}
+                        descrizione={a.data.descrizione}
+                        copertina={a.data.copertina}
+                    />
+                </li>
+            ))}
+        </ol>
+    )}
+</Base>
+
+<style>
+    .copertina {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 24rem;
+        object-fit: cover;
+        border-radius: 0.75rem;
+    }
+
+    .descrizione {
+        color: var(--testo-tenue);
+    }
+
+    .percorso {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+        padding: 0;
+        list-style: none;
+    }
+</style>

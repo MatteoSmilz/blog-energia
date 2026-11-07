@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import Anteprima from '../../components/Anteprima.astro';
+import { getArticoli, raggruppaPerTag } from '../../lib/articoli';
+import { url } from '../../lib/url';
+
+export async function getStaticPaths() {
+    const gruppi = raggruppaPerTag(await getArticoli());
+    return [...gruppi].map(([chiave, gruppo]) => ({
+        params: { tag: chiave },
+        props: { gruppo },
+    }));
+}
+
+const { gruppo } = Astro.props;
+---
+
+<Base titolo={`Tag: ${gruppo.nome}`}>
+    <p><a href={url('tag')}>Tutti i tag</a></p>
+    <h1>{gruppo.nome}</h1>
+    <div class="griglia">
+        {gruppo.articoli.map((a) => (
+            <Anteprima
+                titolo={a.data.titolo}
+                href={url(`articoli/${a.id}`)}
+                pubblicato={a.data.pubblicato}
+                descrizione={a.data.descrizione}
+                copertina={a.data.copertina}
+            />
+        ))}
+    </div>
+</Base>
+
+<style>
+    .griglia {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    }
+</style>

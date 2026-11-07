@@ -2,6 +2,8 @@
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import Base from './Base.astro';
+import { url } from '../lib/url';
+import { slug } from '../lib/testo';
 
 interface Props {
     titolo: string;
@@ -13,8 +15,9 @@ interface Props {
         crediti: string;
         link?: string;
     };
+    tag?: string[];
 }
-const { titolo, sottotitolo, pubblicato, copertina } = Astro.props;
+const { titolo, sottotitolo, pubblicato, copertina, tag = [] } = Astro.props;
 ---
 
 <Base titolo={titolo}>
@@ -24,6 +27,11 @@ const { titolo, sottotitolo, pubblicato, copertina } = Astro.props;
         <time datetime={pubblicato.toISOString()}>
             {pubblicato.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
         </time>
+        {tag.length > 0 && (
+            <ul class="tag">
+                {tag.map((t) => <li><a href={url(`tag/${slug(t)}`)}>{t}</a></li>)}
+            </ul>
+        )}
         {copertina && (
             <figure class="copertina">
                 <Image
@@ -59,4 +67,14 @@ const { titolo, sottotitolo, pubblicato, copertina } = Astro.props;
         font-size: 0.85rem;
         color: var(--testo-tenue);
     }
+
+    .tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+}
 </style>

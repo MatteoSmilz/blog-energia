@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from "astro:content";
+import { slug } from './testo';
 
 export type Articolo = CollectionEntry<'articoli'>;
 export type Relazione = CollectionEntry<'relazioni'>;
@@ -32,4 +33,23 @@ export async function getQuinte(): Promise<Quinta[]> {
 export async function getQuintePerArticolo(idArticolo: string): Promise<Quinta[]> {
     const quinte = await getQuinte();
     return quinte.filter((q) => q.data.articoli.some((rif) => rif.id === idArticolo));
+}
+
+export interface GruppoTag {
+    nome: string;
+    articoli: Articolo[];
+}
+
+export function raggruppaPerTag(articoli: Articolo[]): Map<string, GruppoTag> {
+    const gruppi = new Map<string, GruppoTag>();
+    for (const articolo of articoli) {
+        for (const tag of articolo.data.tag) {
+            const chiave = slug(tag);
+            if (!gruppi.has(chiave)) {
+                gruppi.set(chiave, { nome: tag, articoli: [] });
+            }
+            gruppi.get(chiave)!.articoli.push(articolo);
+        }
+    }
+    return gruppi;
 }
