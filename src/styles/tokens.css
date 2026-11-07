@@ -1,0 +1,76 @@
+:root {
+    color-scheme: dark;
+
+    /* Superfici */
+    --sfondo: #0f1626;
+    --superficie: #182136;
+    --superficie-alta: #212b44;
+    --bordo: #2a3550;
+
+    /* Testo */
+    --testo: #e8ecf4;
+    --testo-chiaro: #c3cbdb;
+    --testo-tenue: #a3adc2;
+
+    /* Azioni */
+    --accento: #f2b84b;
+    --accento-testo: #0f1626;
+
+    /* Serie */
+    --colore-cellulare: #5fd3a8;
+    --colore-terrestre: #f2b84b;
+    --colore-cosmica: #9aa6ff;
+    --serie: var(--accento);
+
+    /* Caratteri */
+    --font-titoli: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-testo: 'Literata', Georgia, 'Times New Roman', serif;
+    --font-codice: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+
+    /* Dimensioni del testo */
+    --testo-piccolo: 0.875rem;
+    --testo-base: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    --testo-grande: clamp(1.2rem, 1.1rem + 0.4vw, 1.375rem);
+    --titolo-3: clamp(1.35rem, 1.2rem + 0.6vw, 1.75rem);
+    --titolo-2: clamp(1.75rem, 1.4rem + 1.4vw, 2.75rem);
+    --titolo-1: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem);
+    --titolo-hero: clamp(2.75rem, 1.4rem + 5.4vw, 5.75rem);
+
+    /* Spaziature */
+    --spazio-1: 0.25rem;
+    --spazio-2: 0.5rem;
+    --spazio-3: 0.75rem;
+    --spazio-4: 1rem;
+    --spazio-5: 1.5rem;
+    --spazio-6: 2rem;
+    --spazio-7: 3rem;
+    --spazio-8: 4rem;
+    --spazio-9: 6rem;
+    --spazio-10: 8rem;
+
+    /* Angoli */
+    --raggio-piccolo: 6px;
+    --raggio: 12px;
+    --raggio-grande: 20px;
+    --raggio-pillola: 999px;
+
+    /* Larghezze */
+    --larghezza-testo: 42rem;
+    --larghezza-pagina: 72.5rem;
+
+    /* Effetti */
+    --ombra: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --durata: 0.2s;
+}
+
+[data-serie='cellulare'] {
+    --serie: var(--colore-cellulare);
+}
+
+[data-serie='terrestre'] {
+    --serie: var(--colore-terrestre);
+}
+
+[data-serie='cosmica'] {
+    --serie: var(--colore-cosmica);
+}

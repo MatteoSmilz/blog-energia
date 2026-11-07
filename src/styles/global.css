@@ -1,22 +1,135 @@
-:root {
-    --testo: #1a1a1a;
-    --sfondo: #fdfdfb;
-    --accento: #c2410c;
-    --larghezza-testo: 42rem;
-    --testo-tenue: #6b6b6b;
-    --bordo: #e5e3dc;
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    color: var(--testo);
     background: var(--sfondo);
-    font-family: Georgia, 'Times New Roman', serif;
-    line-height: 1.6;
+    color: var(--testo);
+    font-family: var(--font-testo);
+    font-size: var(--testo-base);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
 }
 
 main {
-    max-width: var(--larghezza-testo);
+    max-width: var(--larghezza-pagina);
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: var(--spazio-6) var(--spazio-5) var(--spazio-9);
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-titoli);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+}
+
+h1 {
+    font-size: var(--titolo-1);
+}
+
+h2 {
+    font-size: var(--titolo-2);
+}
+
+h3 {
+    font-size: var(--titolo-3);
+    font-weight: 600;
+}
+
+a {
+    color: var(--testo);
+    text-decoration-color: var(--accento);
+    text-underline-offset: 0.2em;
+    transition: color var(--durata);
+
+    &:hover {
+        color: var(--accento);
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accento);
+    outline-offset: 3px;
+    border-radius: var(--raggio-piccolo);
+}
+
+::selection {
+    background: var(--accento);
+    color: var(--accento-testo);
+}
+
+code {
+    font-family: var(--font-codice);
+    font-size: 0.9em;
+    padding: 0.1em 0.35em;
+    background: var(--superficie);
+    border-radius: var(--raggio-piccolo);
+}
+
+.prosa {
+    max-width: var(--larghezza-testo);
+
+    & > * + * {
+        margin-top: var(--spazio-5);
+    }
+
+    & p,
+    & li {
+        text-wrap: pretty;
+    }
+
+    & h2 {
+        margin-top: var(--spazio-8);
+    }
+
+    & h3 {
+        margin-top: var(--spazio-7);
+    }
+
+    & h2 + *,
+    & h3 + * {
+        margin-top: var(--spazio-3);
+    }
+
+    & ul,
+    & ol {
+        padding-left: var(--spazio-5);
+    }
+
+    & li + li {
+        margin-top: var(--spazio-2);
+    }
+
+    & blockquote {
+        margin-left: 0;
+        padding-left: var(--spazio-5);
+        border-left: 3px solid var(--serie);
+        color: var(--testo-chiaro);
+        font-style: italic;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

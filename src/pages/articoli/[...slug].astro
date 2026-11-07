@@ -15,10 +15,10 @@ export async function getStaticPaths() {
 const { articolo } = Astro.props;
 const { Content } = await render(articolo);
 const quinte = await getQuintePerArticolo(articolo.id);
-const { titolo, sottotitolo, pubblicato, copertina, tag } = articolo.data;
+const { titolo, sottotitolo, pubblicato, copertina, tag, serie } = articolo.data;
 ---
 
-<Articolo titolo={titolo} sottotitolo={sottotitolo} pubblicato={pubblicato} copertina={copertina} tag={tag}>
+<Articolo titolo={titolo} sottotitolo={sottotitolo} pubblicato={pubblicato} copertina={copertina} tag={tag} serie={serie}>
     <Content />
     {quinte.length > 0 && (
         <aside class="quinte">

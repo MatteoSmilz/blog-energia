@@ -16,12 +16,13 @@ interface Props {
         link?: string;
     };
     tag?: string[];
+    serie?: string;
 }
-const { titolo, sottotitolo, pubblicato, copertina, tag = [] } = Astro.props;
+const { titolo, sottotitolo, pubblicato, copertina, tag = [], serie } = Astro.props;
 ---
 
 <Base titolo={titolo}>
-    <article>
+    <article data-serie={serie}>
         <h1>{titolo}</h1>
         {sottotitolo && <p class="sottotitolo">{sottotitolo}</p>}
         <time datetime={pubblicato.toISOString()}>
@@ -46,7 +47,9 @@ const { titolo, sottotitolo, pubblicato, copertina, tag = [] } = Astro.props;
                 </figcaption>
             </figure>
         )}
-        <slot />
+        <div class="prosa">
+            <slot />
+        </div>
     </article>
 </Base>
 
