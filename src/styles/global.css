@@ -124,6 +124,40 @@ code {
     }
 }
 
+.katex {
+    font-size: 1.08em;
+}
+
+.katex-display {
+    margin: var(--spazio-6) 0;
+    padding: var(--spazio-2) 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.csl-bib-body {
+    font-size: var(--testo-piccolo);
+    color: var(--testo-chiaro);
+}
+
+.csl-entry {
+    padding-left: var(--spazio-5);
+    text-indent: calc(-1 * var(--spazio-5));
+
+    & + & {
+        margin-top: var(--spazio-3);
+    }
+}
+
+.citation a {
+    color: var(--serie);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

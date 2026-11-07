@@ -61,6 +61,8 @@
     /* Effetti */
     --ombra: 0 8px 32px rgba(0, 0, 0, 0.35);
     --durata: 0.2s;
+
+    --plot-background: var(--superficie);
 }
 
 [data-serie='cellulare'] {
