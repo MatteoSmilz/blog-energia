@@ -1,27 +1,47 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 import { NOMI_SERIE } from './lib/serie';
+
+function schemaCopertina({ image }: SchemaContext) {
+    return z.object({
+        immagine: image(),
+        alt: z.string().min(1),
+        crediti: z.string().min(1),
+        link: z.string().url().optional(),
+    });
+}
 
 const articoli = defineCollection({
     loader: glob({ pattern: '**/*.mdx', base: './src/content/articoli' }),
-    schema: z.object({
-        titolo: z.string(),
-        sottotitolo: z.string().optional(),
-        data: z.coerce.date(),
-        serie: z.enum(NOMI_SERIE),
-        tag: z.array(z.string()).default([]),
-        bozza: z.boolean().default(false),
-    }),
+    schema: (contesto) =>
+        z.object({
+            titolo: z.string(),
+            sottotitolo: z.string().optional(),
+            descrizione: z.string().max(200),
+            pubblicato: z.coerce.date(),
+            aggiornato: z.coerce.date().optional(),
+            serie: z.enum(NOMI_SERIE),
+            tipo: z.enum(['articolo', 'intervista']).default('articolo'),
+            tag: z.array(z.string()).default([]),
+            copertina: schemaCopertina(contesto),
+            inEvidenza: z.boolean().default(false),
+            bozza: z.boolean().default(false),
+        }),
 });
 
 const relazioni = defineCollection({
     loader: glob({ pattern: '**/*.mdx', base: './src/content/relazioni' }),
-    schema: z.object({
-        titolo: z.string(),
-        data: z.coerce.date(),
-        pdf: z.string().optional(),
-        bozza: z.boolean().default(false),
-    }),
+    schema: (contesto) =>
+        z.object({
+            titolo: z.string(),
+            descrizione: z.string().max(200),
+            pubblicato: z.coerce.date(),
+            materia: z.string().optional(),
+            copertina: schemaCopertina(contesto).optional(),
+            pdf: z.string().optional(),
+            bozza: z.boolean().default(false),
+        }),
 });
 
 export const collections = { articoli, relazioni };

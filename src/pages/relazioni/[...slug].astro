@@ -1,11 +1,12 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Articolo from '../../layouts/Articolo.astro';
 import PdfViewer from '../../components/PdfViewer.astro';
+import { getRelazioni } from '../../lib/articoli';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
-    const relazioni = await getCollection('relazioni', ({ data }) => !data.bozza);
+    const relazioni = await getRelazioni();
     return relazioni.map((relazione) => ({
         params: { slug: relazione.id },
         props: { relazione },
@@ -14,10 +15,10 @@ export async function getStaticPaths() {
 
 const { relazione } = Astro.props;
 const { Content } = await render(relazione);
-const { titolo, data, pdf } = relazione.data;
+const { titolo, pubblicato, copertina, pdf } = relazione.data;
 ---
 
-<Articolo titolo={titolo} data={data}>
+<Articolo titolo={titolo} pubblicato={pubblicato} copertina={copertina}>
     <Content />
     {pdf && <PdfViewer src={url(pdf)} />}
 </Articolo>

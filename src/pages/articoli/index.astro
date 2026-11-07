@@ -1,13 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Anteprima from '../../components/Anteprima.astro';
 import { SERIE, NOMI_SERIE } from '../../lib/serie';
+import { getArticoli } from '../../lib/articoli';
 import { url } from '../../lib/url';
 
-const articoli = (await getCollection('articoli', ({ data }) => !data.bozza))
-    .sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
-
+const articoli = await getArticoli();
 const gruppi = NOMI_SERIE
     .map((serie) => ({ serie, articoli: articoli.filter((a) => a.data.serie === serie) }))
     .filter((gruppo) => gruppo.articoli.length > 0);
@@ -24,8 +22,9 @@ const gruppi = NOMI_SERIE
                     <Anteprima
                         titolo={a.data.titolo}
                         href={url(`articoli/${a.id}`)}
-                        data={a.data.data}
-                        descrizione={a.data.sottotitolo}
+                        pubblicato={a.data.pubblicato}
+                        descrizione={a.data.descrizione}
+                        copertina={a.data.copertina}
                     />
                 ))}
             </div>

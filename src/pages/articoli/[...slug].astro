@@ -1,9 +1,10 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Articolo from '../../layouts/Articolo.astro';
+import { getArticoli } from '../../lib/articoli';
 
 export async function getStaticPaths() {
-    const articoli = await getCollection('articoli', ({ data }) => !data.bozza);
+    const articoli = await getArticoli();
     return articoli.map((articolo) => ({
         params: { slug: articolo.id },
         props: { articolo },
@@ -12,8 +13,9 @@ export async function getStaticPaths() {
 
 const { articolo } = Astro.props;
 const { Content } = await render(articolo);
+const { titolo, sottotitolo, pubblicato, copertina } = articolo.data;
 ---
 
-<Articolo {...articolo.data}>
+<Articolo titolo={titolo} sottotitolo={sottotitolo} pubblicato={pubblicato} copertina={copertina}>
     <Content />
 </Articolo>

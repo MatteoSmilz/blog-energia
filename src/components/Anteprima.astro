@@ -1,12 +1,19 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
 interface Props {
     titolo: string;
     href: string;
-    data: Date;
+    pubblicato: Date;
     descrizione?: string;
+    copertina?: {
+        immagine: ImageMetadata;
+        alt: string;
+    };
 }
-const { titolo, href, data, descrizione } = Astro.props;
-const dataLeggibile = data.toLocaleDateString('it-IT', {
+const { titolo, href, pubblicato, descrizione, copertina } = Astro.props;
+const dataLeggibile = pubblicato.toLocaleDateString('it-IT', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -14,15 +21,25 @@ const dataLeggibile = data.toLocaleDateString('it-IT', {
 ---
 
 <a class="anteprima" href={href}>
-    <time datetime={data.toISOString()}>{dataLeggibile}</time>
-    <h3>{titolo}</h3>
-    {descrizione && <p>{descrizione}</p>}
+    {copertina && (
+        <Image
+            src={copertina.immagine}
+            alt={copertina.alt}
+            widths={[400, 800]}
+            sizes="(max-width: 600px) 100vw, 400px"
+        />
+    )}
+    <div class="testo">
+        <time datetime={pubblicato.toISOString()}>{dataLeggibile}</time>
+        <h3>{titolo}</h3>
+        {descrizione && <p>{descrizione}</p>}
+    </div>
 </a>
 
 <style>
     .anteprima {
         display: block;
-        padding: 1.25rem 1.5rem;
+        overflow: hidden;
         border: 1px solid var(--bordo);
         border-radius: 0.75rem;
         color: inherit;
@@ -33,6 +50,18 @@ const dataLeggibile = data.toLocaleDateString('it-IT', {
             border-color: var(--accento);
             transform: translateY(-2px);
         }
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+    }
+
+    .testo {
+        padding: 1.25rem 1.5rem;
     }
 
     time {

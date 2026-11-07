@@ -1,3 +1,11 @@
+import type { ImageMetadata } from 'astro';
+
+interface InfoSerie {
+    nome: string;
+    descrizione: string;
+    copertina?: ImageMetadata;
+}
+
 export const SERIE = {
     cellulare: {
         nome: 'Scala cellulare',
@@ -5,13 +13,13 @@ export const SERIE = {
     },
     terrestre: {
         nome: 'Scala terrestre',
-        descrizione: 'Testo segnaposto: descrizione della serie cellulare.',
+        descrizione: 'Testo segnaposto: descrizione della serie terrestre.',
     },
     cosmica: {
         nome: 'Scala cosmica',
-        descrizione: 'Testo segnaposto: descrizione della serie cellulare.',
+        descrizione: 'Testo segnaposto: descrizione della serie cosmica.',
     },
-} as const;
+} satisfies Record<string, InfoSerie>;
 
 export type Serie = keyof typeof SERIE;
 export const NOMI_SERIE = Object.keys(SERIE) as [Serie, ...Serie[]];
