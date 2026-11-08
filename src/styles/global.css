@@ -158,6 +158,14 @@ code {
     }
 }
 
+.griglia-schede {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+    gap: var(--spazio-5);
+    padding: 0;
+    list-style: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

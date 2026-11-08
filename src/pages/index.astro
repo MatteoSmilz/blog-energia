@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import Anteprima from '../components/Anteprima.astro';
+import Scheda from '../components/Scheda.astro';
 import { getArticoli, scegliInEvidenza } from '../lib/articoli';
 import { url } from '../lib/url';
 
@@ -12,21 +12,33 @@ const altri = articoli.filter((a) => a !== inEvidenza);
 <Base titolo="Le centrali della natura">
     <h1>Le centrali della natura</h1>
     {inEvidenza && (
-        <Anteprima
+        <Scheda
+            variante="grande"
+            priorita
             titolo={inEvidenza.data.titolo}
             href={url(`articoli/${inEvidenza.id}`)}
             pubblicato={inEvidenza.data.pubblicato}
             descrizione={inEvidenza.data.descrizione}
             copertina={inEvidenza.data.copertina}
+            serie={inEvidenza.data.serie}
         />
     )}
-    {altri.map((a) => (
-        <Anteprima
-            titolo={a.data.titolo}
-            href={url(`articoli/${a.id}`)}
-            pubblicato={a.data.pubblicato}
-            descrizione={a.data.descrizione}
-            copertina={a.data.copertina}
-        />
-    ))}
+    <div class="griglia-schede altri">
+        {altri.map((a) => (
+            <Scheda
+                titolo={a.data.titolo}
+                href={url(`articoli/${a.id}`)}
+                pubblicato={a.data.pubblicato}
+                descrizione={a.data.descrizione}
+                copertina={a.data.copertina}
+                serie={a.data.serie}
+            />
+        ))}
+    </div>
 </Base>
+
+<style>
+    .altri {
+        margin-top: var(--spazio-5);
+    }
+</style>

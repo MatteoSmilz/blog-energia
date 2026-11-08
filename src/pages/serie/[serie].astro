@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import Anteprima from '../../components/Anteprima.astro';
+import Scheda from '../../components/Scheda.astro';
 import { SERIE, NOMI_SERIE, type InfoSerie } from '../../lib/serie';
 import { getArticoli } from '../../lib/articoli';
 import { url } from '../../lib/url';
@@ -25,10 +25,10 @@ const articoli = (await getArticoli()).filter((a) => a.data.serie === serie).rev
     {articoli.length === 0 ? (
         <p>I primi articoli di questa serie sono in arrivo.</p>
     ) : (
-        <ol class="percorso">
+        <ol class="griglia-schede">
             {articoli.map((a) => (
                 <li>
-                    <Anteprima
+                    <Scheda
                         titolo={a.data.titolo}
                         href={url(`articoli/${a.id}`)}
                         pubblicato={a.data.pubblicato}
@@ -53,13 +53,5 @@ const articoli = (await getArticoli()).filter((a) => a.data.serie === serie).rev
 
     .descrizione {
         color: var(--testo-tenue);
-    }
-
-    .percorso {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-        padding: 0;
-        list-style: none;
     }
 </style>

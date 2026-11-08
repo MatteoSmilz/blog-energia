@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Anteprima from '../../components/Anteprima.astro';
+import Scheda from '../../components/Scheda.astro';
 import { SERIE, NOMI_SERIE } from '../../lib/serie';
 import { getArticoli } from '../../lib/articoli';
 import { url } from '../../lib/url';
@@ -19,12 +19,13 @@ const gruppi = NOMI_SERIE
             <p class="descrizione">{SERIE[serie].descrizione}</p>
             <div class="griglia">
                 {articoli.map((a) => (
-                    <Anteprima
+                    <Scheda
                         titolo={a.data.titolo}
                         href={url(`articoli/${a.id}`)}
                         pubblicato={a.data.pubblicato}
                         descrizione={a.data.descrizione}
                         copertina={a.data.copertina}
+                        serie={a.data.serie}
                     />
                 ))}
             </div>
