@@ -92,7 +92,17 @@
     .mitocondrio {
         width: clamp(16rem, 40vw, 32.5rem);
         height: auto;
-        transform: rotate(-8deg);
         filter: drop-shadow(0 0 32px rgba(95, 211, 168, 0.4));
+        animation: fluttua 11s ease-in-out infinite alternate;
+    }
+
+    @keyframes fluttua {
+        from {
+            transform: translateY(0) rotate(-8deg);
+        }
+
+        to {
+            transform: translateY(-10px) rotate(-6.5deg);
+        }
     }
 </style>

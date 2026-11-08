@@ -105,4 +105,35 @@ const { href } = Astro.props;
         background: linear-gradient(to bottom, transparent, var(--sfondo));
         pointer-events: none;
     }
+
+    h1,
+    .sottotitolo,
+    .introduzione,
+    .pulsante,
+    .mitocondrio {
+        animation: entrata 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    .sottotitolo {
+        animation-delay: 0.15s;
+    }
+
+    .introduzione {
+        animation-delay: 0.3s;
+    }
+
+    .pulsante {
+        animation-delay: 0.45s;
+    }
+
+    .mitocondrio {
+        animation-delay: 0.7s;
+    }
+
+    @keyframes entrata {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+    }
 </style>

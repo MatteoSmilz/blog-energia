@@ -29,6 +29,7 @@ const posizione = (ev: number) => ((Math.log10(ev) - minimo) / (massimo - minimo
 
 const SOGLIA = 10;
 const ALTEZZA_RIGA = 88;
+const ALTEZZA_EVENTO = 82;
 const ALTEZZA_FUMETTO = 110;
 const ultimaPerRiga: number[] = [];
 
@@ -46,12 +47,13 @@ const segnaposti = [...eventi]
             evento.articolo && pubblicati.has(evento.articolo)
                 ? url(`articoli/${evento.articolo}`)
                 : undefined;
-        return { evento, pos, riga, sposta, link };
+        const valore = `${evento.approssimato ? '≈ ' : ''}${formattaEV(evento.valoreEV)}`;
+        return { evento, pos, riga, sposta, link, valore };
     });
 
 const righe = Math.max(1, ultimaPerRiga.length);
 const asse = righe * ALTEZZA_RIGA + 24;
-const altezza = Math.max(asse + 60, (righe - 1) * ALTEZZA_RIGA + 82 + ALTEZZA_FUMETTO);
+const altezza = Math.max(asse + 60, (righe - 1) * ALTEZZA_RIGA + ALTEZZA_EVENTO + ALTEZZA_FUMETTO);
 const decadi = Array.from({ length: massimo - minimo + 1 }, (_, i) => minimo + i);
 const fonti = [...new Set(eventi.map((e) => e.fonte))];
 const haDidascalia = Astro.slots.has('didascalia');
@@ -60,25 +62,25 @@ const haDidascalia = Astro.slots.has('didascalia');
 <figure class="righello">
     <div class="scorrimento">
         <div class="tela" style={`height: ${altezza}px`}>
-            {segnaposti.map(({ evento, pos, riga, sposta, link }) => {
+            {segnaposti.map(({ evento, pos, riga, sposta, link, valore }, ordine) => {
                 const cima = riga * ALTEZZA_RIGA;
-                const valore = `${evento.approssimato ? '≈ ' : ''}${formattaEV(evento.valoreEV)}`;
+                const inizioStelo = cima + ALTEZZA_EVENTO;
                 return (
                     <Fragment>
                         <div
                             class:list={['stelo', !evento.serie && 'neutro']}
                             data-serie={evento.serie}
-                            style={`left: ${pos}%; top: ${cima + 82}px; height: ${asse - cima - 82}px`}
+                            style={`left: ${pos}%; top: ${inizioStelo}px; height: ${asse - inizioStelo}px; --ordine: ${ordine}`}
                         ></div>
                         <div
                             class:list={['punto', !evento.serie && 'neutro']}
                             data-serie={evento.serie}
-                            style={`left: ${pos}%; top: ${asse - 5}px`}
+                            style={`left: ${pos}%; top: ${asse - 5}px; --ordine: ${ordine}`}
                         ></div>
                         <div
                             class:list={['evento', !evento.serie && 'neutro']}
                             data-serie={evento.serie}
-                            style={`left: ${pos}%; top: ${cima}px; --sposta: ${sposta}`}
+                            style={`left: ${pos}%; top: ${cima}px; --sposta: ${sposta}; --ordine: ${ordine}`}
                         >
                             <button
                                 type="button"
@@ -135,6 +137,26 @@ const haDidascalia = Astro.slots.has('didascalia');
     </figcaption>
 </figure>
 
+<script>
+    const movimentoRidotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!movimentoRidotto) {
+        for (const righello of document.querySelectorAll<HTMLElement>('.righello')) {
+            righello.classList.add('in-attesa');
+            const osservatore = new IntersectionObserver(
+                ([voce]) => {
+                    if (voce.isIntersecting) {
+                        righello.classList.add('acceso');
+                        osservatore.disconnect();
+                    }
+                },
+                { threshold: 0.3 },
+            );
+            osservatore.observe(righello);
+        }
+    }
+</script>
+
 <style>
     .righello {
         margin: var(--spazio-6) 0;
@@ -154,11 +176,14 @@ const haDidascalia = Astro.slots.has('didascalia');
         --serie: var(--testo);
     }
 
+    /* Eventi */
+
     .evento {
         position: absolute;
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: var(--spazio-1);
         transform: translateX(-50%);
         color: var(--serie);
 
@@ -183,6 +208,15 @@ const haDidascalia = Astro.slots.has('didascalia');
     .icona:focus-visible {
         transform: scale(1.15);
     }
+
+    .valore {
+        font-family: var(--font-titoli);
+        font-size: 0.95rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    /* Fumetto */
 
     .fumetto {
         position: absolute;
@@ -217,13 +251,6 @@ const haDidascalia = Astro.slots.has('didascalia');
         white-space: nowrap;
     }
 
-    .valore {
-        font-family: var(--font-titoli);
-        font-size: 0.95rem;
-        font-weight: 700;
-        white-space: nowrap;
-    }
-
     .nome {
         font-size: var(--testo-piccolo);
         color: var(--testo);
@@ -234,6 +261,8 @@ const haDidascalia = Astro.slots.has('didascalia');
         font-weight: 600;
         color: var(--serie);
     }
+
+    /* Steli, punti e asse */
 
     .stelo {
         position: absolute;
@@ -283,6 +312,8 @@ const haDidascalia = Astro.slots.has('didascalia');
         font-size: 0.72rem;
     }
 
+    /* Didascalia */
+
     figcaption {
         max-width: var(--larghezza-testo);
         margin-top: var(--spazio-4);
@@ -294,5 +325,46 @@ const haDidascalia = Astro.slots.has('didascalia');
     .fonti {
         margin: var(--spazio-2) 0 0;
         font-size: 0.8rem;
+    }
+
+    /* Accensione */
+
+    .in-attesa .punto {
+        scale: 0;
+    }
+
+    .in-attesa .stelo {
+        scale: 1 0;
+        transform-origin: bottom;
+    }
+
+    .in-attesa .evento {
+        opacity: 0;
+        translate: 0 12px;
+    }
+
+    .acceso .punto,
+    .acceso .stelo,
+    .acceso .evento {
+        scale: 1;
+        translate: 0 0;
+        transition:
+            scale 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+            opacity 0.8s ease,
+            translate 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .acceso .evento {
+        opacity: 1;
+        transition-delay: calc(var(--ordine) * 300ms + 360ms);
+    }
+
+    .acceso .stelo {
+        opacity: 0.7;
+        transition-delay: calc(var(--ordine) * 300ms + 160ms);
+    }
+
+    .acceso .punto {
+        transition-delay: calc(var(--ordine) * 300ms);
     }
 </style>
