@@ -15,7 +15,11 @@ const { intestazioni, variante } = Astro.props;
             <span class="titolo">In questo articolo</span>
             <ol>
                 {intestazioni.map((h) => (
-                    <li><a href={`#${h.slug}`} data-sezione={h.slug}>{h.text}</a></li>
+                    <li>
+                        <a href={`#${h.slug}`} data-sezione={h.slug}>
+                            {h.text}
+                        </a>
+                    </li>
                 ))}
             </ol>
         </div>
@@ -25,14 +29,20 @@ const { intestazioni, variante } = Astro.props;
         <summary>In questo articolo</summary>
         <ol>
             {intestazioni.map((h) => (
-                <li><a href={`#${h.slug}`} data-sezione={h.slug}>{h.text}</a></li>
+                <li>
+                    <a href={`#${h.slug}`} data-sezione={h.slug}>
+                        {h.text}
+                    </a>
+                </li>
             ))}
         </ol>
     </details>
 )}
 
 <script>
-    const collegamenti = [...document.querySelectorAll<HTMLAnchorElement>('.indice a[data-sezione]')];
+    const collegamenti = [
+        ...document.querySelectorAll<HTMLAnchorElement>('.indice a[data-sezione]'),
+    ];
     const sezioni = [...new Set(collegamenti.map((a) => a.dataset.sezione!))]
         .map((id) => document.getElementById(id))
         .filter((elemento): elemento is HTMLElement => elemento !== null);
@@ -109,7 +119,9 @@ const { intestazioni, variante } = Astro.props;
         line-height: 1.35;
         color: var(--testo-tenue);
         text-decoration: none;
-        transition: color var(--durata), border-color var(--durata);
+        transition:
+            color var(--durata),
+            border-color var(--durata);
 
         &[aria-current] {
             border-color: var(--serie);

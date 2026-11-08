@@ -19,7 +19,9 @@ const sezioni = [
 <footer class="piede">
     <div class="contenitore colonne">
         <div class="presentazione">
-            <a href={url()} class="marchio">Le centrali della natura</a>
+            <a href={url()} class="marchio">
+                Le centrali della natura
+            </a>
             <p>[Una frase tua che descrive il blog.]</p>
         </div>
 
@@ -44,7 +46,9 @@ const sezioni = [
             <span class="titolo">Sezioni</span>
             <ul>
                 {sezioni.map((s) => (
-                    <li><a href={url(s.percorso)}>{s.testo}</a></li>
+                    <li>
+                        <a href={url(s.percorso)}>{s.testo}</a>
+                    </li>
                 ))}
             </ul>
         </nav>

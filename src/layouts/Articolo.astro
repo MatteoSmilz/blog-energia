@@ -55,7 +55,13 @@ const capitoli = intestazioni.filter((h) => h.depth === 2);
 const haIndice = capitoli.length >= 2;
 ---
 
-<Base titolo={titolo} descrizione={descrizione} immagine={copertina?.immagine} tipo="article" paginaLarga>
+<Base
+    titolo={titolo}
+    descrizione={descrizione}
+    immagine={copertina?.immagine}
+    tipo="article"
+    paginaLarga
+>
     <article class="articolo" data-serie={serie} data-articolo data-pagefind-body>
         <BarraLettura />
         <div class="alone" aria-hidden="true"></div>
@@ -73,14 +79,17 @@ const haIndice = capitoli.length >= 2;
                 <time datetime={pubblicato.toISOString()}>{formattaData(pubblicato)}</time>
                 {aggiornato && (
                     <span>
-                        Aggiornato il <time datetime={aggiornato.toISOString()}>{formattaData(aggiornato)}</time>
+                        Aggiornato il{' '}
+                        <time datetime={aggiornato.toISOString()}>{formattaData(aggiornato)}</time>
                     </span>
                 )}
                 {minuti && <span>{minuti === 1 ? '1 minuto' : `${minuti} minuti`} di lettura</span>}
                 {tag.length > 0 && (
                     <ul class="tag">
                         {tag.map((t) => (
-                            <li><a href={url(`tag/${slug(t)}`)}>{t}</a></li>
+                            <li>
+                                <a href={url(`tag/${slug(t)}`)}>{t}</a>
+                            </li>
                         ))}
                     </ul>
                 )}
@@ -98,7 +107,12 @@ const haIndice = capitoli.length >= 2;
                     data-pagefind-meta="image[src], image_alt[alt]"
                 />
                 <figcaption>
-                    Immagine: {copertina.link ? <a href={copertina.link}>{copertina.crediti}</a> : copertina.crediti}
+                    Immagine:{' '}
+                    {copertina.link ? (
+                        <a href={copertina.link}>{copertina.crediti}</a>
+                    ) : (
+                        copertina.crediti
+                    )}
                 </figcaption>
             </figure>
         )}

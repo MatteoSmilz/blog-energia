@@ -84,7 +84,12 @@ const serie = NOMI_SERIE.map((nome) => ({
         <h2>Le serie</h2>
         <div class="griglia-serie">
             {serie.map(({ nome, info, numeroArticoli }) => (
-                <SchedaSerie serie={nome} info={info} href={url(`serie/${nome}`)} numeroArticoli={numeroArticoli} />
+                <SchedaSerie
+                    serie={nome}
+                    info={info}
+                    href={url(`serie/${nome}`)}
+                    numeroArticoli={numeroArticoli}
+                />
             ))}
         </div>
     </section>

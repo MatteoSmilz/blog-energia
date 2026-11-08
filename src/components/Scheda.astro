@@ -41,7 +41,9 @@ const grande = variante == 'grande';
                 src={copertina.immagine}
                 alt=""
                 widths={grande ? [640, 1280] : [320, 640]}
-                sizes={grande ? '(max-width: 900px) 100vw, 640px' : '(max-width: 700px) 100vw, 320px'}
+                sizes={
+                    grande ? '(max-width: 900px) 100vw, 640px' : '(max-width: 700px) 100vw, 320px'
+                }
                 loading={priorita ? 'eager' : 'lazy'}
             />
         ) : (
@@ -110,7 +112,11 @@ const grande = variante == 'grande';
         display: flex;
         align-items: center;
         justify-content: center;
-        background: radial-gradient(circle at 50% 50%, var(--superficie-alta) 0%, var(--superficie) 72%);
+        background: radial-gradient(
+            circle at 50% 50%,
+            var(--superficie-alta) 0%,
+            var(--superficie) 72%
+        );
         color: var(--serie);
     }
 

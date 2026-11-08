@@ -21,7 +21,12 @@ const haDidascalia = Astro.slots.has('default');
     <ul class="griglia">
         {immagini.map((i) => (
             <li>
-                <Image src={i.src} alt={i.alt} widths={[320, 640]} sizes="(max-width: 600px) 50vw, 240px" />
+                <Image
+                    src={i.src}
+                    alt={i.alt}
+                    widths={[320, 640]}
+                    sizes="(max-width: 600px) 50vw, 240px"
+                />
             </li>
         ))}
     </ul>

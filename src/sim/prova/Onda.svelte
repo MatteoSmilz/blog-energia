@@ -7,7 +7,12 @@
     let ampiezza = $state(0.6);
     let inPausa = $state(false);
 
-    function disegna(ctx: CanvasRenderingContext2D, larghezza: number, altezza: number, tempo: number) {
+    function disegna(
+        ctx: CanvasRenderingContext2D,
+        larghezza: number,
+        altezza: number,
+        tempo: number,
+    ) {
         const colore = leggiColore(ctx.canvas, '--serie');
         const bordo = leggiColore(ctx.canvas, '--bordo');
         const centro = altezza / 2;

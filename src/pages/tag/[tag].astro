@@ -16,7 +16,9 @@ const { gruppo } = Astro.props;
 ---
 
 <Base titolo={`Tag: ${gruppo.nome}`}>
-    <p><a href={url('tag')}>Tutti i tag</a></p>
+    <p>
+        <a href={url('tag')}>Tutti i tag</a>
+    </p>
     <h1>{gruppo.nome}</h1>
     <div class="griglia">
         {gruppo.articoli.map((a) => (

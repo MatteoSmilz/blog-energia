@@ -28,9 +28,7 @@ const haDidascalia = Astro.slots.has('default');
                 <slot />
             </span>
         )}
-        <span class="crediti">
-            Immagine: {link ? <a href={link}>{crediti}</a> : crediti}
-        </span>
+        <span class="crediti">Immagine: {link ? <a href={link}>{crediti}</a> : crediti}</span>
     </figcaption>
 </figure>
 

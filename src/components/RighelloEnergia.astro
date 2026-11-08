@@ -15,7 +15,9 @@ const { eventi } = Astro.props;
 const esistenti = new Set((await getCollection('articoli')).map((a) => a.id));
 for (const evento of eventi) {
     if (evento.articolo && !esistenti.has(evento.articolo)) {
-        throw new Error(`L'evento "${evento.nome}" cita l'articolo "${evento.articolo}", che non esiste.`);
+        throw new Error(
+            `L'evento "${evento.nome}" cita l'articolo "${evento.articolo}", che non esiste.`,
+        );
     }
 }
 const pubblicati = new Set((await getArticoli()).map((a) => a.id));
@@ -40,7 +42,10 @@ const segnaposti = [...eventi]
         }
         ultimaPerRiga[riga] = pos;
         const sposta = pos < 10 ? '-15%' : pos > 90 ? '-85%' : '-50%';
-        const link = evento.articolo && pubblicati.has(evento.articolo) ? url(`articoli/${evento.articolo}`) : undefined;
+        const link =
+            evento.articolo && pubblicati.has(evento.articolo)
+                ? url(`articoli/${evento.articolo}`)
+                : undefined;
         return { evento, pos, riga, sposta, link };
     });
 
@@ -75,10 +80,16 @@ const haDidascalia = Astro.slots.has('didascalia');
                             data-serie={evento.serie}
                             style={`left: ${pos}%; top: ${cima}px; --sposta: ${sposta}`}
                         >
-                            <button type="button" class="icona" aria-label={`${evento.nome}: ${valore}`}>
+                            <button
+                                type="button"
+                                class="icona"
+                                aria-label={`${evento.nome}: ${valore}`}
+                            >
                                 <Icona nome={evento.icona} dimensione={48} />
                             </button>
-                            <span class="valore" aria-hidden="true">{valore}</span>
+                            <span class="valore" aria-hidden="true">
+                                {valore}
+                            </span>
                             <div class="fumetto">
                                 <div class="contenuto">
                                     <span class="nome">{evento.nome}</span>
@@ -99,11 +110,17 @@ const haDidascalia = Astro.slots.has('didascalia');
                 return (
                     <Fragment>
                         <div class="tacca" style={`left: ${pos}%; top: ${asse}px`}></div>
-                        <div class="decade" style={`left: ${pos}%; top: ${asse + 14}px; transform: translateX(${sposta}%)`}>
+                        <div
+                            class="decade"
+                            style={`left: ${pos}%; top: ${asse + 14}px; transform: translateX(${sposta}%)`}
+                        >
                             {formattaEV(10 ** esponente)}
                         </div>
                         {esponente >= 0 && esponente % 3 === 0 && (
-                            <div class="joule" style={`left: ${pos}%; top: ${asse + 34}px; transform: translateX(${sposta}%)`}>
+                            <div
+                                class="joule"
+                                style={`left: ${pos}%; top: ${asse + 34}px; transform: translateX(${sposta}%)`}
+                            >
                                 {joule.mantissa} · 10<sup>{joule.esponente}</sup> J
                             </div>
                         )}
@@ -175,7 +192,9 @@ const haDidascalia = Astro.slots.has('didascalia');
         transform: translateX(var(--sposta));
         visibility: hidden;
         opacity: 0;
-        transition: opacity 0.15s, visibility 0.15s;
+        transition:
+            opacity 0.15s,
+            visibility 0.15s;
     }
 
     .evento:hover .fumetto,

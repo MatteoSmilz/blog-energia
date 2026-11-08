@@ -47,7 +47,9 @@ const voce = (i: number) => {
             <h2>Dietro le quinte</h2>
             <ul>
                 {quinte.map((q) => (
-                    <li><a href={url(`dietro-le-quinte/${q.id}`)}>{q.data.titolo}</a></li>
+                    <li>
+                        <a href={url(`dietro-le-quinte/${q.id}`)}>{q.data.titolo}</a>
+                    </li>
                 ))}
             </ul>
         </aside>

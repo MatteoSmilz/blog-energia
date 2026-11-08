@@ -2,7 +2,13 @@
 const id = `nota-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<span class="nota-gruppo"><input type="checkbox" id={id} class="interruttore" /><label for={id} class="richiamo" aria-label="Mostra o nascondi la nota"></label><span class="nota"><slot /></span></span>
+<span class="nota-gruppo">
+    <input type="checkbox" id={id} class="interruttore" />
+    <label for={id} class="richiamo" aria-label="Mostra o nascondi la nota"></label>
+    <span class="nota">
+        <slot />
+    </span>
+</span>
 
 <style>
     .nota-gruppo {

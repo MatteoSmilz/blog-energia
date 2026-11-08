@@ -18,22 +18,54 @@ const attuale = Astro.url.pathname;
 const attiva = (percorso: string) => attuale.startsWith(url(percorso));
 ---
 
-<a class="salta" href="#contenuto">Vai al contenuto</a>
+<a class="salta" href="#contenuto">
+    Vai al contenuto
+</a>
 
 <header class:list={['intestazione', sovrapposta && 'sovrapposta']}>
     <div class="contenitore">
-        <a href={url()} class="marchio">Le centrali della natura</a>
+        <a href={url()} class="marchio">
+            Le centrali della natura
+        </a>
 
         <div class="azioni">
-            <a href={url('cerca')} class="cerca" aria-label="Cerca" aria-current={attiva('cerca') ? 'page' : undefined}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <a
+                href={url('cerca')}
+                class="cerca"
+                aria-label="Cerca"
+                aria-current={attiva('cerca') ? 'page' : undefined}
+            >
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                >
                     <circle cx="11" cy="11" r="7"></circle>
                     <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
                 </svg>
             </a>
 
-            <button type="button" class="apri" popovertarget="menu-principale" aria-label="Apri il menu">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <button
+                type="button"
+                class="apri"
+                popovertarget="menu-principale"
+                aria-label="Apri il menu"
+            >
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                >
                     <line x1="4" y1="7" x2="20" y2="7"></line>
                     <line x1="4" y1="12" x2="20" y2="12"></line>
                     <line x1="4" y1="17" x2="20" y2="17"></line>
@@ -41,14 +73,32 @@ const attiva = (percorso: string) => attuale.startsWith(url(percorso));
             </button>
 
             <nav id="menu-principale" class="menu" popover="auto" aria-label="Principale">
-                <button type="button" class="chiudi" popovertarget="menu-principale" popovertargetaction="hide" aria-label="Chiudi il menu">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <button
+                    type="button"
+                    class="chiudi"
+                    popovertarget="menu-principale"
+                    popovertargetaction="hide"
+                    aria-label="Chiudi il menu"
+                >
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        aria-hidden="true"
+                    >
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                     </svg>
                 </button>
                 {voci.map((v) => (
-                    <a href={url(v.percorso)} aria-current={attiva(v.percorso) ? 'page' : undefined}>
+                    <a
+                        href={url(v.percorso)}
+                        aria-current={attiva(v.percorso) ? 'page' : undefined}
+                    >
                         {v.testo}
                     </a>
                 ))}

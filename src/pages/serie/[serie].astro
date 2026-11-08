@@ -17,7 +17,14 @@ const articoli = (await getArticoli()).filter((a) => a.data.serie === serie).rev
 
 <Base titolo={info.nome}>
     {info.copertina && (
-        <Image src={info.copertina} alt="" widths={[800, 1600]} sizes="100vw" loading="eager" class="copertina" />
+        <Image
+            src={info.copertina}
+            alt=""
+            widths={[800, 1600]}
+            sizes="100vw"
+            loading="eager"
+            class="copertina"
+        />
     )}
     <h1>{info.nome}</h1>
     <p class="descrizione">{info.descrizione}</p>

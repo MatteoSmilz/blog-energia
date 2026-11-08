@@ -12,13 +12,22 @@ interface Props {
 
 const { serie, info, href, numeroArticoli } = Astro.props;
 const conteggio =
-    numeroArticoli === 0 ? 'In arrivo' : numeroArticoli === 1 ? '1 articolo' : `${numeroArticoli} articoli`;
+    numeroArticoli === 0
+        ? 'In arrivo'
+        : numeroArticoli === 1
+          ? '1 articolo'
+          : `${numeroArticoli} articoli`;
 ---
 
 <a class="scheda-serie" href={href} data-serie={serie}>
     <div class="copertina">
         {info.copertina ? (
-            <Image src={info.copertina} alt="" widths={[400, 800]} sizes="(max-width: 700px) 100vw, 380px" />
+            <Image
+                src={info.copertina}
+                alt=""
+                widths={[400, 800]}
+                sizes="(max-width: 700px) 100vw, 380px"
+            />
         ) : (
             <div class="segnaposto">
                 <Icona nome={info.icona} dimensione={80} />
@@ -70,7 +79,11 @@ const conteggio =
         align-items: center;
         justify-content: center;
         height: 100%;
-        background: radial-gradient(circle at 50% 50%, var(--superficie-alta) 0%, var(--superficie) 75%);
+        background: radial-gradient(
+            circle at 50% 50%,
+            var(--superficie-alta) 0%,
+            var(--superficie) 75%
+        );
         color: var(--serie);
     }
 

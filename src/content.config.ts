@@ -1,19 +1,19 @@
-import { defineCollection, reference, type SchemaContext } from "astro:content";
-import { glob } from "astro/loaders";
-import { z } from "astro/zod";
-import { NOMI_SERIE } from "./lib/serie";
+import { defineCollection, reference, type SchemaContext } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
+import { NOMI_SERIE } from './lib/serie';
 
 function schemaCopertina({ image }: SchemaContext) {
     return z.object({
         immagine: image(),
         alt: z.string().min(1),
         crediti: z.string().min(1),
-        link: z.string().url().optional(),
+        link: z.url().optional(),
     });
 }
 
 const articoli = defineCollection({
-    loader: glob({ pattern: "**/*.mdx", base: "./src/content/articoli" }),
+    loader: glob({ pattern: '**/*.mdx', base: './src/content/articoli' }),
     schema: (contesto) =>
         z.object({
             titolo: z.string(),
@@ -22,7 +22,7 @@ const articoli = defineCollection({
             pubblicato: z.coerce.date(),
             aggiornato: z.coerce.date().optional(),
             serie: z.enum(NOMI_SERIE),
-            tipo: z.enum(["articolo", "intervista"]).default("articolo"),
+            tipo: z.enum(['articolo', 'intervista']).default('articolo'),
             tag: z.array(z.string()).default([]),
             copertina: schemaCopertina(contesto),
             inEvidenza: z.boolean().default(false),
@@ -31,7 +31,7 @@ const articoli = defineCollection({
 });
 
 const relazioni = defineCollection({
-    loader: glob({ pattern: "**/*.mdx", base: "./src/content/relazioni" }),
+    loader: glob({ pattern: '**/*.mdx', base: './src/content/relazioni' }),
     schema: (contesto) =>
         z.object({
             titolo: z.string(),
@@ -45,13 +45,13 @@ const relazioni = defineCollection({
 });
 
 const quinte = defineCollection({
-    loader: glob({ pattern: "**/*.mdx", base: "./src/content/quinte" }),
+    loader: glob({ pattern: '**/*.mdx', base: './src/content/quinte' }),
     schema: (contesto) =>
         z.object({
             titolo: z.string(),
             descrizione: z.string().max(200),
             pubblicato: z.coerce.date(),
-            articoli: z.array(reference("articoli")).min(1),
+            articoli: z.array(reference('articoli')).min(1),
             copertina: schemaCopertina(contesto).optional(),
             bozza: z.boolean().default(false),
         }),

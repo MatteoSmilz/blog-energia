@@ -112,7 +112,9 @@
     });
 </script>
 
-<canvas bind:this={canvas} role="img" aria-label={etichetta} style:aspect-ratio={rapporto}></canvas>
+<div class="tela" role="img" aria-label={etichetta}>
+    <canvas bind:this={canvas} style:aspect-ratio={rapporto}></canvas>
+</div>
 
 <style>
     canvas {
