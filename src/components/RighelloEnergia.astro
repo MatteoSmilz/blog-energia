@@ -1,0 +1,279 @@
+---
+import { getCollection } from 'astro:content';
+import Icona from './icone/Icona.astro';
+import type { EventoEnergia } from '../data/eventi-energia';
+import { formattaEV, potenzaDieci, EV_IN_JOULE } from '../lib/energia';
+import { getArticoli } from '../lib/articoli';
+import { url } from '../lib/url';
+
+interface Props {
+    eventi: EventoEnergia[];
+}
+
+const { eventi } = Astro.props;
+
+const esistenti = new Set((await getCollection('articoli')).map((a) => a.id));
+for (const evento of eventi) {
+    if (evento.articolo && !esistenti.has(evento.articolo)) {
+        throw new Error(`L'evento "${evento.nome}" cita l'articolo "${evento.articolo}", che non esiste.`);
+    }
+}
+const pubblicati = new Set((await getArticoli()).map((a) => a.id));
+
+const esponenti = eventi.map((e) => Math.log10(e.valoreEV));
+const minimo = Math.floor(Math.min(...esponenti));
+const massimo = Math.ceil(Math.max(...esponenti));
+const posizione = (ev: number) => ((Math.log10(ev) - minimo) / (massimo - minimo)) * 100;
+
+const SOGLIA = 10;
+const ALTEZZA_RIGA = 88;
+const ALTEZZA_FUMETTO = 110;
+const ultimaPerRiga: number[] = [];
+
+const segnaposti = [...eventi]
+    .sort((a, b) => a.valoreEV - b.valoreEV)
+    .map((evento) => {
+        const pos = posizione(evento.valoreEV);
+        let riga = ultimaPerRiga.findIndex((ultima) => pos - ultima >= SOGLIA);
+        if (riga === -1) {
+            riga = ultimaPerRiga.length;
+        }
+        ultimaPerRiga[riga] = pos;
+        const sposta = pos < 10 ? '-15%' : pos > 90 ? '-85%' : '-50%';
+        const link = evento.articolo && pubblicati.has(evento.articolo) ? url(`articoli/${evento.articolo}`) : undefined;
+        return { evento, pos, riga, sposta, link };
+    });
+
+const righe = Math.max(1, ultimaPerRiga.length);
+const asse = righe * ALTEZZA_RIGA + 24;
+const altezza = Math.max(asse + 60, (righe - 1) * ALTEZZA_RIGA + 82 + ALTEZZA_FUMETTO);
+const decadi = Array.from({ length: massimo - minimo + 1 }, (_, i) => minimo + i);
+const fonti = [...new Set(eventi.map((e) => e.fonte))];
+const haDidascalia = Astro.slots.has('didascalia');
+---
+
+<figure class="righello">
+    <div class="scorrimento">
+        <div class="tela" style={`height: ${altezza}px`}>
+            {segnaposti.map(({ evento, pos, riga, sposta, link }) => {
+                const cima = riga * ALTEZZA_RIGA;
+                const valore = `${evento.approssimato ? '≈ ' : ''}${formattaEV(evento.valoreEV)}`;
+                return (
+                    <Fragment>
+                        <div
+                            class:list={['stelo', !evento.serie && 'neutro']}
+                            data-serie={evento.serie}
+                            style={`left: ${pos}%; top: ${cima + 82}px; height: ${asse - cima - 82}px`}
+                        ></div>
+                        <div
+                            class:list={['punto', !evento.serie && 'neutro']}
+                            data-serie={evento.serie}
+                            style={`left: ${pos}%; top: ${asse - 5}px`}
+                        ></div>
+                        <div
+                            class:list={['evento', !evento.serie && 'neutro']}
+                            data-serie={evento.serie}
+                            style={`left: ${pos}%; top: ${cima}px; --sposta: ${sposta}`}
+                        >
+                            <button type="button" class="icona" aria-label={`${evento.nome}: ${valore}`}>
+                                <Icona nome={evento.icona} dimensione={48} />
+                            </button>
+                            <span class="valore" aria-hidden="true">{valore}</span>
+                            <div class="fumetto">
+                                <div class="contenuto">
+                                    <span class="nome">{evento.nome}</span>
+                                    {link && <a href={link}>Leggi l'articolo</a>}
+                                </div>
+                            </div>
+                        </div>
+                    </Fragment>
+                );
+            })}
+
+            <div class="asse" style={`top: ${asse}px`}></div>
+
+            {decadi.map((esponente, i) => {
+                const pos = (i / (decadi.length - 1)) * 100;
+                const sposta = i === 0 ? 0 : i === decadi.length - 1 ? -100 : -50;
+                const joule = potenzaDieci(10 ** esponente * EV_IN_JOULE);
+                return (
+                    <Fragment>
+                        <div class="tacca" style={`left: ${pos}%; top: ${asse}px`}></div>
+                        <div class="decade" style={`left: ${pos}%; top: ${asse + 14}px; transform: translateX(${sposta}%)`}>
+                            {formattaEV(10 ** esponente)}
+                        </div>
+                        {esponente >= 0 && esponente % 3 === 0 && (
+                            <div class="joule" style={`left: ${pos}%; top: ${asse + 34}px; transform: translateX(${sposta}%)`}>
+                                {joule.mantissa} · 10<sup>{joule.esponente}</sup> J
+                            </div>
+                        )}
+                    </Fragment>
+                );
+            })}
+        </div>
+    </div>
+    <figcaption>
+        {haDidascalia && <slot name="didascalia" />}
+        <p class="fonti">Fonti: {fonti.join('; ')}.</p>
+    </figcaption>
+</figure>
+
+<style>
+    .righello {
+        margin: var(--spazio-6) 0;
+    }
+
+    .scorrimento {
+        overflow-x: auto;
+    }
+
+    .tela {
+        position: relative;
+        min-width: 60rem;
+        margin: 0 var(--spazio-5);
+    }
+
+    .neutro {
+        --serie: var(--testo);
+    }
+
+    .evento {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translateX(-50%);
+        color: var(--serie);
+
+        &:hover,
+        &:focus-within {
+            z-index: 3;
+        }
+    }
+
+    .icona {
+        display: flex;
+        padding: var(--spazio-1);
+        background: none;
+        color: inherit;
+        border: 0;
+        border-radius: var(--raggio);
+        cursor: pointer;
+        transition: transform var(--durata);
+    }
+
+    .evento:hover .icona,
+    .icona:focus-visible {
+        transform: scale(1.15);
+    }
+
+    .fumetto {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        padding-top: var(--spazio-2);
+        transform: translateX(var(--sposta));
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.15s, visibility 0.15s;
+    }
+
+    .evento:hover .fumetto,
+    .evento:focus-within .fumetto {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .contenuto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spazio-1);
+        padding: var(--spazio-3) var(--spazio-4);
+        background: var(--superficie-alta);
+        border: 1px solid var(--bordo);
+        border-radius: var(--raggio);
+        box-shadow: var(--ombra);
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .valore {
+        font-family: var(--font-titoli);
+        font-size: 0.95rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .nome {
+        font-size: var(--testo-piccolo);
+        color: var(--testo);
+    }
+
+    .contenuto a {
+        font-size: var(--testo-piccolo);
+        font-weight: 600;
+        color: var(--serie);
+    }
+
+    .stelo {
+        position: absolute;
+        width: 2px;
+        margin-left: -1px;
+        background: var(--serie);
+        opacity: 0.7;
+    }
+
+    .punto {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        margin-left: -6px;
+        background: var(--serie);
+        border-radius: 50%;
+    }
+
+    .asse {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--testo);
+    }
+
+    .tacca {
+        position: absolute;
+        width: 1px;
+        height: 8px;
+        background: var(--testo);
+    }
+
+    .decade,
+    .joule {
+        position: absolute;
+        white-space: nowrap;
+        font-family: var(--font-titoli);
+        color: var(--testo-tenue);
+    }
+
+    .decade {
+        font-size: 0.8rem;
+    }
+
+    .joule {
+        font-size: 0.72rem;
+    }
+
+    figcaption {
+        max-width: var(--larghezza-testo);
+        margin-top: var(--spazio-4);
+        font-size: var(--testo-piccolo);
+        line-height: 1.55;
+        color: var(--testo-tenue);
+    }
+
+    .fonti {
+        margin: var(--spazio-2) 0 0;
+        font-size: 0.8rem;
+    }
+</style>

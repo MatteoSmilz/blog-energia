@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import Scheda from '../components/Scheda.astro';
 import { getArticoli, scegliInEvidenza } from '../lib/articoli';
 import { url } from '../lib/url';
+import RighelloEnergia from '../components/RighelloEnergia.astro';
+import { EVENTI_HOME } from '../data/eventi-energia';
 
 const articoli = await getArticoli();
 const inEvidenza = scegliInEvidenza(articoli);
@@ -11,6 +13,14 @@ const altri = articoli.filter((a) => a !== inEvidenza);
 
 <Base titolo="Le centrali della natura">
     <h1>Le centrali della natura</h1>
+    <section class="energia">
+        <h2>Quanta energia libera un singolo evento?</h2>
+        <RighelloEnergia eventi={EVENTI_HOME}>
+            <Fragment slot="didascalia">
+                [La tua spiegazione: scala logaritmica, cos'è un elettronvolt.]
+            </Fragment>
+        </RighelloEnergia>
+    </section>
     {inEvidenza && (
         <Scheda
             variante="grande"
