@@ -83,6 +83,7 @@ code {
 
 .prosa {
     max-width: var(--larghezza-testo);
+    counter-reset: figura;
 
     & > * + * {
         margin-top: var(--spazio-5);

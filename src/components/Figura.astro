@@ -1,0 +1,74 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+    src: ImageMetadata;
+    alt: string;
+    crediti: string;
+    link?: string;
+    larghezza?: 'testo' | 'ampia';
+}
+
+const { src, alt, crediti, link, larghezza = 'testo' } = Astro.props;
+const ampia = larghezza === 'ampia';
+const haDidascalia = Astro.slots.has('default');
+---
+
+<figure class:list={['figura', larghezza]}>
+    <Image
+        src={src}
+        alt={alt}
+        widths={ampia ? [800, 1600] : [700, 1400]}
+        sizes={ampia ? '(max-width: 1000px) 100vw, 960px' : '(max-width: 720px) 100vw, 672px'}
+    />
+    <figcaption>
+        {haDidascalia && (
+            <span class="didascalia">
+                <slot />
+            </span>
+        )}
+        <span class="crediti">
+            Immagine: {link ? <a href={link}>{crediti}</a> : crediti}
+        </span>
+    </figcaption>
+</figure>
+
+<style>
+    .figura {
+        margin: var(--spazio-7) 0;
+        counter-increment: figura;
+    }
+
+    .ampia {
+        width: min(60rem, calc(100vw - 2 * var(--spazio-5)));
+    }
+
+    .figura :global(img) {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: var(--raggio);
+    }
+
+    figcaption {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spazio-1);
+        margin-top: var(--spazio-3);
+        font-size: var(--testo-piccolo);
+        line-height: 1.5;
+        color: var(--testo-chiaro);
+    }
+
+    .didascalia::before {
+        content: 'Figura ' counter(figura) '. ';
+        font-family: var(--font-titoli);
+        font-weight: 600;
+        color: var(--serie);
+    }
+
+    .crediti {
+        color: var(--testo-tenue);
+    }
+</style>

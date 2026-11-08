@@ -11,6 +11,9 @@ copertina:
     link: "https://sdo.gsfc.nasa.gov/"
 ---
 
+import Figura from '../../components/Figura.astro';
+import sole from '../../assets/articoli/prova.jpg';
+
 Il Sole converte massa in energia secondo $E = mc^2$ [@einstein1905].
 
 $$
@@ -20,6 +23,10 @@ $$
 $$
 \Delta T_{\text{teorico}} = \frac{-Q}{m_{\text{tot}} \cdot c} = \frac{-n_{\text{sale}} \cdot \Delta H^\circ_{\text{sol}}}{(m_{\text{acqua}} + m_{\text{sale}}) \cdot c} = \frac{-\dfrac{m_{\text{sale}}}{M_{\text{sale}}} \cdot \Delta H^\circ_{\text{sol}}}{(m_{\text{acqua}} + m_{\text{sale}}) \cdot c} = \frac{-\dfrac{7{,}56\ \text{g}}{101{,}10\ \text{g/mol}} \cdot 34\,900\ \text{J/mol}}{(50{,}0\ \text{g} + 7{,}56\ \text{g}) \cdot 3{,}76\ \text{J/(g·K)}} \approx -12{,}1\ \text{K}
 $$
+
+<Figura src={sole} alt="Il Sole nell'ultravioletto estremo, con anelli di plasma sopra la superficie" crediti="NASA/SDO" link="https://sdo.gsfc.nasa.gov/" larghezza="ampia">
+    Il Sole fotografato dal satellite SDO alla lunghezza d'onda di 17,1 nm.
+</Figura>
 
 ## Bibliografia
 
