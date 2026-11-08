@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import Icona from '../components/icone/Icona.astro';
+import { ICONE, type NomeIcona } from '../components/icone';
+import { NOMI_SERIE } from '../lib/serie';
+
+const nomi = Object.keys(ICONE) as NomeIcona[];
+---
+
+<Base titolo="Icone">
+    <h1>Icone</h1>
+    {NOMI_SERIE.map((serie) => (
+        <section data-serie={serie}>
+            <h2>{serie}</h2>
+            <ul class="griglia">
+                {nomi.map((nome) => (
+                    <li>
+                        <Icona nome={nome} dimensione={64} />
+                        <span>{nome}</span>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    ))}
+</Base>
+
+<style>
+    section {
+        color: var(--serie);
+    }
+
+    .griglia {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+        gap: var(--spazio-4);
+        padding: 0;
+        list-style: none;
+    }
+
+    li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spazio-2);
+        padding: var(--spazio-4);
+        background: var(--superficie);
+        border-radius: var(--raggio);
+    }
+
+    span {
+        font-size: var(--testo-piccolo);
+        color: var(--testo-tenue);
+    }
+</style>

@@ -1,0 +1,21 @@
+---
+import type { PropsIcona } from './tipi';
+
+type Props = PropsIcona;
+
+const { dimensione = 56, titolo, class: classe } = Astro.props;
+const larghezza = Math.round((dimensione * 64) / 56);
+---
+
+<svg
+    viewBox="0 0 64 56"
+    width={larghezza}
+    height={dimensione}
+    class={classe}
+    role={titolo ? 'img' : undefined}
+    aria-label={titolo}
+    aria-hidden={titolo ? undefined : 'true'}
+    focusable="false"
+>
+    <slot />
+</svg>

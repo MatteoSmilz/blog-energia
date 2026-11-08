@@ -1,0 +1,13 @@
+---
+import { ICONE, type NomeIcona } from './index';
+import type { PropsIcona } from './tipi';
+
+interface Props extends PropsIcona {
+    nome: NomeIcona;
+}
+
+const { nome, ...resto } = Astro.props;
+const Componente = ICONE[nome];
+---
+
+<Componente {...resto} />

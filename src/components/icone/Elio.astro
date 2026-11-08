@@ -1,0 +1,14 @@
+---
+import Svg from './Svg.astro';
+import type { PropsIcona } from './tipi';
+
+type Props = PropsIcona;
+---
+
+<Svg {...Astro.props}>
+    <circle cx="32" cy="28" r="26" fill="currentColor" fill-opacity="0.18"></circle>
+    <circle cx="26" cy="22" r="8" fill="currentColor"></circle>
+    <circle cx="38" cy="22" r="8" style="fill: var(--icona-secondario, #c9cfdd)"></circle>
+    <circle cx="26" cy="34" r="8" style="fill: var(--icona-secondario, #c9cfdd)"></circle>
+    <circle cx="38" cy="34" r="8" fill="currentColor"></circle>
+</Svg>

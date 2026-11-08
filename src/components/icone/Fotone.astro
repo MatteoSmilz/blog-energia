@@ -1,0 +1,11 @@
+---
+import Svg from './Svg.astro';
+import type { PropsIcona } from './tipi';
+
+type Props = PropsIcona;
+---
+
+<Svg {...Astro.props}>
+    <path d="M4 28 Q10 14 16 28 T28 28 T40 28 T52 28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+    <polyline points="52,20 61,28 52,36" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+</Svg>
