@@ -1,0 +1,179 @@
+---
+import { url } from '../lib/url';
+
+interface Props {
+    sovrapposta?: boolean;
+}
+
+const { sovrapposta = false } = Astro.props;
+
+const voci = [
+    { testo: 'Articoli', percorso: 'articoli' },
+    { testo: 'Relazioni', percorso: 'relazioni' },
+    { testo: 'Dietro le quinte', percorso: 'dietro-le-quinte' },
+    { testo: 'Chi sono', percorso: 'chi-sono' },
+];
+
+const attuale = Astro.url.pathname;
+const attiva = (percorso: string) => attuale.startsWith(url(percorso));
+---
+
+<a class="salta" href="#contenuto">Vai al contenuto</a>
+
+<header class:list={['intestazione', sovrapposta && 'sovrapposta']}>
+    <div class="contenitore">
+        <a href={url()} class="marchio">Le centrali della natura</a>
+
+        <button type="button" class="apri" popovertarget="menu-principale" aria-label="Apri il menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <line x1="4" y1="7" x2="20" y2="7"></line>
+                <line x1="4" y1="12" x2="20" y2="12"></line>
+                <line x1="4" y1="17" x2="20" y2="17"></line>
+            </svg>
+        </button>
+
+        <nav id="menu-principale" class="menu" popover="auto" aria-label="Principale">
+            <button type="button" class="chiudi" popovertarget="menu-principale" popovertargetaction="hide" aria-label="Chiudi il menu">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                </svg>
+            </button>
+            {voci.map((v) => (
+                <a href={url(v.percorso)} aria-current={attiva(v.percorso) ? 'page' : undefined}>
+                    {v.testo}
+                </a>
+            ))}
+        </nav>
+    </div>
+</header>
+
+<style>
+    .salta {
+        position: absolute;
+        top: -10rem;
+        left: var(--spazio-4);
+        z-index: 30;
+        padding: var(--spazio-3) var(--spazio-5);
+        background: var(--accento);
+        color: var(--accento-testo);
+        border-radius: var(--raggio-pillola);
+        font-family: var(--font-titoli);
+        font-weight: 600;
+
+        &:focus {
+            top: var(--spazio-4);
+        }
+    }
+
+    .intestazione {
+        position: relative;
+        z-index: 10;
+    }
+
+    .sovrapposta {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .contenitore {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--spazio-4);
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: var(--spazio-5);
+    }
+
+    .marchio {
+        font-family: var(--font-titoli);
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .menu {
+        position: static;
+        inset: auto;
+        display: flex;
+        gap: var(--spazio-2) var(--spazio-5);
+        width: auto;
+        height: auto;
+        margin: 0;
+        padding: var(--spazio-2) var(--spazio-5);
+        overflow: visible;
+        background: rgba(15, 22, 38, 0.72);
+        backdrop-filter: blur(8px);
+        color: inherit;
+        border: 0;
+        border-radius: var(--raggio-pillola);
+        font-family: var(--font-titoli);
+
+        & a {
+            text-decoration: none;
+
+            &[aria-current='page'] {
+                color: var(--accento);
+            }
+        }
+    }
+
+    .apri,
+    .chiudi {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        background: rgba(15, 22, 38, 0.72);
+        color: var(--testo);
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    @media (max-width: 47.99rem) {
+        .apri {
+            display: flex;
+        }
+
+        .menu {
+            display: none;
+        }
+
+        .menu:popover-open {
+            position: fixed;
+            inset: 0 0 auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            width: 100%;
+            padding: var(--spazio-9) var(--spazio-5) var(--spazio-6);
+            background: var(--sfondo);
+            border-bottom: 1px solid var(--bordo);
+            border-radius: 0;
+            box-shadow: var(--ombra);
+
+            & a {
+                padding: var(--spazio-3) 0;
+                border-bottom: 1px solid var(--bordo);
+                font-size: var(--titolo-3);
+            }
+        }
+
+        .menu::backdrop {
+            background: rgba(15, 22, 38, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .chiudi {
+            position: absolute;
+            top: var(--spazio-5);
+            right: var(--spazio-5);
+            display: flex;
+        }
+    }
+</style>

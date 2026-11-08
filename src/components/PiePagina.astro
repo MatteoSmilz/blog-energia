@@ -1,0 +1,140 @@
+---
+import Icona from './icone/Icona.astro';
+import { SERIE, NOMI_SERIE, type InfoSerie } from '../lib/serie';
+import { url } from '../lib/url';
+
+const anno = new Date().getFullYear();
+const repository = 'https://github.com/MatteoSmilz/blog-energia';
+
+const sezioni = [
+    { testo: 'Articoli', percorso: 'articoli' },
+    { testo: 'Relazioni di laboratorio', percorso: 'relazioni' },
+    { testo: 'Dietro le quinte', percorso: 'dietro-le-quinte' },
+    { testo: 'Tutti i tag', percorso: 'tag' },
+    { testo: 'Chi sono', percorso: 'chi-sono' },
+];
+---
+
+<footer class="piede">
+    <div class="contenitore colonne">
+        <div class="presentazione">
+            <a href={url()} class="marchio">Le centrali della natura</a>
+            <p>[Una frase tua che descrive il blog.]</p>
+        </div>
+
+        <nav aria-label="Serie">
+            <span class="titolo">Serie</span>
+            <ul>
+                {NOMI_SERIE.map((nome) => {
+                    const info: InfoSerie = SERIE[nome];
+                    return (
+                        <li data-serie={nome}>
+                            <a href={url(`serie/${nome}`)}>
+                                <Icona nome={info.icona} dimensione={18} />
+                                {info.nome}
+                            </a>
+                        </li>
+                    );
+                })}
+            </ul>
+        </nav>
+
+        <nav aria-label="Sezioni del sito">
+            <span class="titolo">Sezioni</span>
+            <ul>
+                {sezioni.map((s) => (
+                    <li><a href={url(s.percorso)}>{s.testo}</a></li>
+                ))}
+            </ul>
+        </nav>
+    </div>
+
+    <div class="contenitore fondo">
+        <p>
+            © {anno} Matteo D'Ambros. Testi, immagini originali e dati:
+            <a href="https://creativecommons.org/licenses/by/4.0/deed.it">CC BY 4.0</a>. Codice:
+            <a href={`${repository}/blob/master/LICENSE`}>MIT</a>.
+        </p>
+        <a href={repository}>Codice sorgente su GitHub</a>
+    </div>
+</footer>
+
+<style>
+    .piede {
+        margin-top: var(--spazio-10);
+        border-top: 1px solid var(--bordo);
+        font-size: var(--testo-piccolo);
+    }
+
+    .contenitore {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: var(--spazio-7) var(--spazio-5);
+    }
+
+    .colonne {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+        gap: var(--spazio-7);
+    }
+
+    .marchio {
+        font-family: var(--font-titoli);
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .presentazione p {
+        max-width: 22rem;
+        margin: var(--spazio-3) 0 0;
+        color: var(--testo-tenue);
+    }
+
+    .titolo {
+        font-family: var(--font-titoli);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--testo-tenue);
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spazio-3);
+        margin: var(--spazio-4) 0 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    ul a {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spazio-2);
+        text-decoration: none;
+    }
+
+    li[data-serie] :global(svg) {
+        color: var(--serie);
+    }
+
+    .fondo {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: var(--spazio-3) var(--spazio-6);
+        padding-top: var(--spazio-5);
+        border-top: 1px solid var(--bordo);
+        color: var(--testo-tenue);
+
+        & p {
+            margin: 0;
+        }
+
+        & a {
+            color: var(--testo-chiaro);
+        }
+    }
+</style>

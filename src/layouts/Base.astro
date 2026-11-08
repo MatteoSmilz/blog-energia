@@ -2,6 +2,8 @@
 import 'katex/dist/katex.min.css';
 import '../styles/global.css';
 import { Font } from 'astro:assets';
+import Intestazione from '../components/Intestazione.astro';
+import PiePagina from '../components/PiePagina.astro';
 import { url } from '../lib/url';
 
 interface Props {
@@ -26,71 +28,21 @@ const titoloPagina = titolo === NOME ? NOME : `${titolo} · ${NOME}`;
         <title>{titoloPagina}</title>
     </head>
     <body>
-        <header class:list={['intestazione', headerSovrapposto && 'sovrapposta']}>
-            <div class="contenitore">
-                <a href={url()} class="marchio">{NOME}</a>
-                <nav aria-label="Principale">
-                    <a href={url('articoli')}>Articoli</a>
-                    <a href={url('relazioni')}>Relazioni</a>
-                    <a href={url('dietro-le-quinte')}>Dietro le quinte</a>
-                    <a href={url('chi-sono')}>Chi sono</a>
-                </nav>
-            </div>
-        </header>
+        <Intestazione sovrapposta={headerSovrapposto} />
         <slot name="hero" />
-        <main class:list={[paginaLarga && 'larga']}>
+        <main id="contenuto" tabindex="-1" class:list={[paginaLarga && 'larga']}>
             <slot />
         </main>
+        <PiePagina />
     </body>
 </html>
 
 <style>
-    .intestazione {
-        position: relative;
-        z-index: 10;
-    }
-
-    .sovrapposta {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-    }
-
-    .contenitore {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        gap: var(--spazio-4);
-        max-width: var(--larghezza-pagina);
-        margin: 0 auto;
-        padding: var(--spazio-5);
-    }
-
-    .marchio {
-        font-family: var(--font-titoli);
-        font-size: 1.25rem;
-        font-weight: 700;
-        text-decoration: none;
-    }
-
     .larga {
         max-width: 80rem;
     }
 
-    nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--spazio-2) var(--spazio-5);
-        padding: var(--spazio-2) var(--spazio-5);
-        background: rgba(15, 22, 38, 0.72);
-        backdrop-filter: blur(8px);
-        border-radius: var(--raggio-pillola);
-        font-family: var(--font-titoli);
-    }
-
-    nav a {
-        text-decoration: none;
+    main:focus {
+        outline: none;
     }
 </style>
