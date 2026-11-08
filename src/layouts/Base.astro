@@ -1,20 +1,39 @@
 ---
 import 'katex/dist/katex.min.css';
 import '../styles/global.css';
-import { Font } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { Font, getImage } from 'astro:assets';
 import Intestazione from '../components/Intestazione.astro';
 import PiePagina from '../components/PiePagina.astro';
 import { url } from '../lib/url';
 
 interface Props {
     titolo: string;
+    descrizione?: string;
+    immagine?: ImageMetadata;
+    tipo?: 'website' | 'article';
     headerSovrapposto?: boolean;
     paginaLarga?: boolean;
 }
 
-const { titolo, headerSovrapposto = false, paginaLarga = false } = Astro.props;
 const NOME = 'Le centrali della natura';
+const DESCRIZIONE = '[Una frase tua che descrive il blog: compare nelle anteprime e nei risultati di ricerca.]';
+
+const {
+    titolo,
+    descrizione = DESCRIZIONE,
+    immagine,
+    tipo = 'website',
+    headerSovrapposto = false,
+    paginaLarga = false,
+} = Astro.props;
+
 const titoloPagina = titolo === NOME ? NOME : `${titolo} · ${NOME}`;
+const canonico = new URL(Astro.url.pathname, Astro.site);
+const anteprima = immagine
+    ? (await getImage({ src: immagine, width: 1200, format: 'jpg' })).src
+    : url('anteprima.png');
+const anteprimaAssoluta = new URL(anteprima, Astro.site);
 ---
 
 <!doctype html>
@@ -22,9 +41,24 @@ const titoloPagina = titolo === NOME ? NOME : `${titolo} · ${NOME}`;
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={descrizione} />
+        <link rel="canonical" href={canonico} />
         <link rel="icon" href={url('favicon.svg')} />
+        <link rel="alternate" type="application/rss+xml" title={NOME} href={url('rss.xml')} />
+        <link rel="sitemap" href={url('sitemap-index.xml')} />
+
+        <meta property="og:type" content={tipo} />
+        <meta property="og:site_name" content={NOME} />
+        <meta property="og:locale" content="it_IT" />
+        <meta property="og:title" content={titolo} />
+        <meta property="og:description" content={descrizione} />
+        <meta property="og:url" content={canonico} />
+        <meta property="og:image" content={anteprimaAssoluta} />
+        <meta name="twitter:card" content="summary_large_image" />
+
         <Font cssVariable="--font-bricolage" preload />
         <Font cssVariable="--font-literata" />
+        <slot name="testa" />
         <title>{titoloPagina}</title>
     </head>
     <body>

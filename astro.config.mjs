@@ -6,10 +6,12 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeCitation from 'rehype-citation';
 
+import sitemap from '@astrojs/sitemap';
+
 export default defineConfig({
     site: 'https://matteosmilz.github.io',
     base: '/blog-energia',
-    integrations: [mdx(), svelte()],
+    integrations: [mdx(), svelte(), sitemap()],
     image: {
         domains: ['i.ytimg.com'],
     },

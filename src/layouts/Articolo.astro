@@ -32,6 +32,7 @@ interface Props {
     minuti?: number;
     precedente?: Collegamento;
     successivo?: Collegamento;
+    descrizione?: string;
 }
 
 const {
@@ -46,6 +47,7 @@ const {
     minuti,
     precedente,
     successivo,
+    descrizione,
 } = Astro.props;
 
 const info: InfoSerie | undefined = serie ? SERIE[serie] : undefined;
@@ -53,14 +55,14 @@ const capitoli = intestazioni.filter((h) => h.depth === 2);
 const haIndice = capitoli.length >= 2;
 ---
 
-<Base titolo={titolo} paginaLarga>
-    <article class="articolo" data-serie={serie} data-articolo>
+<Base titolo={titolo} descrizione={descrizione} immagine={copertina?.immagine} tipo="article" paginaLarga>
+    <article class="articolo" data-serie={serie} data-articolo data-pagefind-body>
         <BarraLettura />
         <div class="alone" aria-hidden="true"></div>
 
         <header class="intestazione">
             {info && (
-                <a class="etichetta" href={url(`serie/${serie}`)}>
+                <a class="etichetta" href={url(`serie/${serie}`)} data-pagefind-filter="serie">
                     <Icona nome={info.icona} dimensione={20} />
                     {info.nome}
                 </a>
@@ -93,6 +95,7 @@ const haIndice = capitoli.length >= 2;
                     widths={[800, 1600]}
                     sizes="(max-width: 1100px) 100vw, 960px"
                     loading="eager"
+                    data-pagefind-meta="image[src], image_alt[alt]"
                 />
                 <figcaption>
                     Immagine: {copertina.link ? <a href={copertina.link}>{copertina.crediti}</a> : copertina.crediti}
@@ -108,7 +111,7 @@ const haIndice = capitoli.length >= 2;
         </div>
 
         {(precedente || successivo) && (
-            <nav class="percorso" aria-label="Articoli della serie">
+            <nav class="percorso" aria-label="Articoli della serie" data-pagefind-ignore>
                 {precedente && (
                     <a class="passo" href={precedente.href}>
                         <span class="direzione">Articolo precedente della serie</span>

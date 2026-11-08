@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+
+<Base titolo="Cerca">
+    <link slot="testa" rel="stylesheet" href={url('pagefind/pagefind-ui.css')} />
+
+    <h1>Cerca nel blog</h1>
+    <div id="ricerca"></div>
+    <noscript>
+        <p>La ricerca funziona solo con JavaScript attivo.</p>
+    </noscript>
+</Base>
+
+<script is:inline define:vars={{ interfaccia: url('pagefind/pagefind-ui.js'), base: url() }}>
+    const script = document.createElement('script');
+    script.src = interfaccia;
+    script.onload = () => {
+        new PagefindUI({
+            element: '#ricerca',
+            baseUrl: base,
+            showSubResults: true,
+            showImages: true,
+        });
+    };
+    script.onerror = () => {
+        document.getElementById('ricerca').textContent =
+            'La ricerca è disponibile solo nel sito pubblicato o con npm run preview.';
+    };
+    document.head.append(script);
+</script>
+
+<style>
+    #ricerca {
+        --pagefind-ui-scale: 1;
+        --pagefind-ui-primary: var(--accento);
+        --pagefind-ui-text: var(--testo);
+        --pagefind-ui-background: var(--superficie);
+        --pagefind-ui-border: var(--bordo);
+        --pagefind-ui-tag: var(--superficie-alta);
+        --pagefind-ui-border-width: 1px;
+        --pagefind-ui-border-radius: 12px;
+        --pagefind-ui-image-border-radius: 8px;
+        --pagefind-ui-font: var(--font-testo);
+
+        margin-top: var(--spazio-6);
+    }
+</style>
