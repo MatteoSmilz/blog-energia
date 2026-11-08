@@ -7,9 +7,10 @@ import { url } from '../lib/url';
 interface Props {
     titolo: string;
     headerSovrapposto?: boolean;
+    paginaLarga?: boolean;
 }
 
-const { titolo, headerSovrapposto = false } = Astro.props;
+const { titolo, headerSovrapposto = false, paginaLarga = false } = Astro.props;
 const NOME = 'Le centrali della natura';
 const titoloPagina = titolo === NOME ? NOME : `${titolo} · ${NOME}`;
 ---
@@ -37,7 +38,7 @@ const titoloPagina = titolo === NOME ? NOME : `${titolo} · ${NOME}`;
             </div>
         </header>
         <slot name="hero" />
-        <main>
+        <main class:list={[paginaLarga && 'larga']}>
             <slot />
         </main>
     </body>
@@ -72,6 +73,10 @@ const titoloPagina = titolo === NOME ? NOME : `${titolo} · ${NOME}`;
         font-size: 1.25rem;
         font-weight: 700;
         text-decoration: none;
+    }
+
+    .larga {
+        max-width: 80rem;
     }
 
     nav {

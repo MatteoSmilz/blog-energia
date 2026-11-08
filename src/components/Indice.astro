@@ -1,0 +1,131 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+    intestazioni: MarkdownHeading[];
+    variante: 'laterale' | 'compatto';
+}
+
+const { intestazioni, variante } = Astro.props;
+---
+
+{variante === 'laterale' ? (
+    <nav class="indice laterale" aria-label="Indice dell'articolo">
+        <div class="fisso">
+            <span class="titolo">In questo articolo</span>
+            <ol>
+                {intestazioni.map((h) => (
+                    <li><a href={`#${h.slug}`} data-sezione={h.slug}>{h.text}</a></li>
+                ))}
+            </ol>
+        </div>
+    </nav>
+) : (
+    <details class="indice compatto">
+        <summary>In questo articolo</summary>
+        <ol>
+            {intestazioni.map((h) => (
+                <li><a href={`#${h.slug}`} data-sezione={h.slug}>{h.text}</a></li>
+            ))}
+        </ol>
+    </details>
+)}
+
+<script>
+    const collegamenti = [...document.querySelectorAll<HTMLAnchorElement>('.indice a[data-sezione]')];
+    const sezioni = [...new Set(collegamenti.map((a) => a.dataset.sezione!))]
+        .map((id) => document.getElementById(id))
+        .filter((elemento): elemento is HTMLElement => elemento !== null);
+
+    const attiva = (id: string) => {
+        for (const a of collegamenti) {
+            if (a.dataset.sezione === id) {
+                a.setAttribute('aria-current', 'true');
+            } else {
+                a.removeAttribute('aria-current');
+            }
+        }
+    };
+
+    const osservatore = new IntersectionObserver(
+        (voci) => {
+            for (const voce of voci) {
+                if (voce.isIntersecting) {
+                    attiva(voce.target.id);
+                }
+            }
+        },
+        { rootMargin: '0px 0px -70% 0px' },
+    );
+
+    sezioni.forEach((sezione) => osservatore.observe(sezione));
+</script>
+
+<style>
+    .laterale {
+        display: none;
+    }
+
+    @media (min-width: 80rem) {
+        .laterale {
+            display: block;
+        }
+
+        .compatto {
+            display: none;
+        }
+    }
+
+    .fisso {
+        position: sticky;
+        top: var(--spazio-6);
+    }
+
+    .titolo,
+    summary {
+        font-family: var(--font-titoli);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--testo-tenue);
+    }
+
+    ol {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spazio-3);
+        margin: var(--spazio-4) 0 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    a {
+        display: block;
+        padding-left: var(--spazio-3);
+        border-left: 2px solid var(--bordo);
+        font-family: var(--font-titoli);
+        font-size: var(--testo-piccolo);
+        line-height: 1.35;
+        color: var(--testo-tenue);
+        text-decoration: none;
+        transition: color var(--durata), border-color var(--durata);
+
+        &[aria-current] {
+            border-color: var(--serie);
+            color: var(--testo);
+        }
+    }
+
+    .compatto {
+        margin-bottom: var(--spazio-6);
+        padding: var(--spazio-4) var(--spazio-5);
+        background: var(--superficie);
+        border: 1px solid var(--bordo);
+        border-radius: var(--raggio);
+    }
+
+    summary {
+        cursor: pointer;
+    }
+</style>

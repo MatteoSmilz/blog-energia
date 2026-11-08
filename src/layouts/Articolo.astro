@@ -1,14 +1,25 @@
 ---
-import type { ImageMetadata } from 'astro';
+import type { ImageMetadata, MarkdownHeading } from 'astro';
 import { Image } from 'astro:assets';
 import Base from './Base.astro';
+import Icona from '../components/icone/Icona.astro';
+import Indice from '../components/Indice.astro';
+import BarraLettura from '../components/BarraLettura.astro';
+import { SERIE, type Serie, type InfoSerie } from '../lib/serie';
+import { formattaData } from '../lib/date';
 import { url } from '../lib/url';
 import { slug } from '../lib/testo';
+
+interface Collegamento {
+    titolo: string;
+    href: string;
+}
 
 interface Props {
     titolo: string;
     sottotitolo?: string;
     pubblicato: Date;
+    aggiornato?: Date;
     copertina?: {
         immagine: ImageMetadata;
         alt: string;
@@ -16,30 +27,71 @@ interface Props {
         link?: string;
     };
     tag?: string[];
-    serie?: string;
+    serie?: Serie;
+    intestazioni?: MarkdownHeading[];
+    minuti?: number;
+    precedente?: Collegamento;
+    successivo?: Collegamento;
 }
-const { titolo, sottotitolo, pubblicato, copertina, tag = [], serie } = Astro.props;
+
+const {
+    titolo,
+    sottotitolo,
+    pubblicato,
+    aggiornato,
+    copertina,
+    tag = [],
+    serie,
+    intestazioni = [],
+    minuti,
+    precedente,
+    successivo,
+} = Astro.props;
+
+const info: InfoSerie | undefined = serie ? SERIE[serie] : undefined;
+const capitoli = intestazioni.filter((h) => h.depth === 2);
+const haIndice = capitoli.length >= 2;
 ---
 
-<Base titolo={titolo}>
-    <article data-serie={serie}>
-        <h1>{titolo}</h1>
-        {sottotitolo && <p class="sottotitolo">{sottotitolo}</p>}
-        <time datetime={pubblicato.toISOString()}>
-            {pubblicato.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
-        </time>
-        {tag.length > 0 && (
-            <ul class="tag">
-                {tag.map((t) => <li><a href={url(`tag/${slug(t)}`)}>{t}</a></li>)}
-            </ul>
-        )}
+<Base titolo={titolo} paginaLarga>
+    <article class="articolo" data-serie={serie} data-articolo>
+        <BarraLettura />
+        <div class="alone" aria-hidden="true"></div>
+
+        <header class="intestazione">
+            {info && (
+                <a class="etichetta" href={url(`serie/${serie}`)}>
+                    <Icona nome={info.icona} dimensione={20} />
+                    {info.nome}
+                </a>
+            )}
+            <h1>{titolo}</h1>
+            {sottotitolo && <p class="sottotitolo">{sottotitolo}</p>}
+            <div class="meta">
+                <time datetime={pubblicato.toISOString()}>{formattaData(pubblicato)}</time>
+                {aggiornato && (
+                    <span>
+                        Aggiornato il <time datetime={aggiornato.toISOString()}>{formattaData(aggiornato)}</time>
+                    </span>
+                )}
+                {minuti && <span>{minuti === 1 ? '1 minuto' : `${minuti} minuti`} di lettura</span>}
+                {tag.length > 0 && (
+                    <ul class="tag">
+                        {tag.map((t) => (
+                            <li><a href={url(`tag/${slug(t)}`)}>{t}</a></li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        </header>
+
         {copertina && (
             <figure class="copertina">
                 <Image
                     src={copertina.immagine}
                     alt={copertina.alt}
                     widths={[800, 1600]}
-                    sizes="(max-width: 900px) 100vw, 900px"
+                    sizes="(max-width: 1100px) 100vw, 960px"
                     loading="eager"
                 />
                 <figcaption>
@@ -47,37 +99,215 @@ const { titolo, sottotitolo, pubblicato, copertina, tag = [], serie } = Astro.pr
                 </figcaption>
             </figure>
         )}
+
+        {haIndice && <Indice intestazioni={capitoli} variante="compatto" />}
+        {haIndice && <Indice intestazioni={capitoli} variante="laterale" />}
+
         <div class="prosa">
             <slot />
         </div>
+
+        {(precedente || successivo) && (
+            <nav class="percorso" aria-label="Articoli della serie">
+                {precedente && (
+                    <a class="passo" href={precedente.href}>
+                        <span class="direzione">Articolo precedente della serie</span>
+                        <span class="titolo-passo">{precedente.titolo}</span>
+                    </a>
+                )}
+                {successivo && (
+                    <a class="passo successivo" href={successivo.href}>
+                        <span class="direzione">Articolo successivo della serie</span>
+                        <span class="titolo-passo">{successivo.titolo}</span>
+                    </a>
+                )}
+            </nav>
+        )}
     </article>
 </Base>
 
 <style>
-    .copertina {
-        margin: 2rem 0;
+    .articolo {
+        position: relative;
+        isolation: isolate;
+        display: grid;
+        grid-template-columns: [testo-start] minmax(0, 42rem) [testo-end margine-end];
+        justify-content: center;
     }
 
-    .copertina img {
-        display: block;
-        width: 100%;
-        height: auto;
-        border-radius: 0.75rem;
+    @media (min-width: 68rem) {
+        .articolo {
+            grid-template-columns: [testo-start] minmax(0, 42rem) [testo-end] 15rem [margine-end];
+            column-gap: 3rem;
+        }
     }
 
-    figcaption {
-        margin-top: 0.5rem;
-        font-size: 0.85rem;
+    @media (min-width: 80rem) {
+        .articolo {
+            grid-template-columns:
+                [indice-start] 12rem
+                [indice-end testo-start] minmax(0, 42rem)
+                [testo-end] 15rem
+                [margine-end];
+        }
+
+        .articolo > :global(.laterale) {
+            grid-column: indice;
+        }
+    }
+
+    .intestazione,
+    .copertina,
+    .percorso {
+        grid-column: testo-start / margine-end;
+    }
+
+    .prosa,
+    .articolo > :global(.compatto) {
+        grid-column: testo;
+    }
+
+    .alone {
+        position: absolute;
+        top: -14rem;
+        left: 50%;
+        z-index: -1;
+        width: min(90rem, 100vw);
+        height: 40rem;
+        transform: translateX(-50%);
+        background: radial-gradient(
+            ellipse at center,
+            color-mix(in srgb, var(--serie) 22%, transparent) 0%,
+            transparent 70%
+        );
+        pointer-events: none;
+    }
+
+    .intestazione {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spazio-4);
+        padding-top: var(--spazio-7);
+    }
+
+    .etichetta {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spazio-2);
+        font-family: var(--font-titoli);
+        font-size: var(--testo-piccolo);
+        font-weight: 600;
+        color: var(--serie);
+        text-decoration: none;
+    }
+
+    h1 {
+        max-width: 20ch;
+        margin: 0;
+    }
+
+    .sottotitolo {
+        max-width: 40rem;
+        margin: 0;
+        font-size: var(--testo-grande);
+        color: var(--testo-chiaro);
+    }
+
+    .meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--spazio-3) var(--spazio-5);
+        font-family: var(--font-titoli);
+        font-size: var(--testo-piccolo);
         color: var(--testo-tenue);
     }
 
     .tag {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 1rem 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: 0.85rem;
-}
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spazio-2);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        & a {
+            display: block;
+            padding: var(--spazio-1) var(--spazio-3);
+            border: 1px solid var(--bordo);
+            border-radius: var(--raggio-pillola);
+            color: var(--testo-chiaro);
+            text-decoration: none;
+
+            &:hover {
+                border-color: var(--serie);
+            }
+        }
+    }
+
+    .copertina {
+        margin: var(--spazio-7) 0 var(--spazio-8);
+    }
+
+    .copertina :global(img) {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 30rem;
+        object-fit: cover;
+        border-radius: var(--raggio-grande);
+    }
+
+    .copertina figcaption {
+        margin-top: var(--spazio-3);
+        font-size: var(--testo-piccolo);
+        color: var(--testo-tenue);
+    }
+
+    .prosa > :global(p:first-of-type) {
+        font-size: var(--testo-grande);
+        color: var(--testo);
+    }
+
+    .percorso {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+        gap: var(--spazio-4);
+        margin-top: var(--spazio-9);
+    }
+
+    .passo {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spazio-2);
+        padding: var(--spazio-5) var(--spazio-6);
+        background: var(--superficie);
+        border-radius: var(--raggio-grande);
+        color: var(--testo);
+        text-decoration: none;
+        transition: background var(--durata);
+
+        &:hover {
+            background: var(--superficie-alta);
+        }
+    }
+
+    .successivo {
+        align-items: flex-end;
+        text-align: right;
+    }
+
+    .direzione {
+        font-family: var(--font-titoli);
+        font-size: var(--testo-piccolo);
+        color: var(--testo-tenue);
+    }
+
+    .titolo-passo {
+        font-family: var(--font-titoli);
+        font-size: var(--titolo-3);
+        font-weight: 600;
+        line-height: 1.15;
+    }
 </style>

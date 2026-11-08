@@ -1,0 +1,49 @@
+<div class="barra-lettura" aria-hidden="true">
+    <div class="riempimento"></div>
+</div>
+
+<script>
+    const riempimento = document.querySelector<HTMLElement>('.barra-lettura .riempimento');
+    const articolo = document.querySelector<HTMLElement>('[data-articolo]');
+
+    if (riempimento && articolo) {
+        let richiesta = 0;
+
+        const aggiorna = () => {
+            richiesta = 0;
+            const riquadro = articolo.getBoundingClientRect();
+            const totale = riquadro.height - window.innerHeight;
+            const avanzamento = totale > 0 ? Math.min(1, Math.max(0, -riquadro.top / totale)) : 1;
+            riempimento.style.transform = `scaleX(${avanzamento})`;
+        };
+
+        const programma = () => {
+            if (!richiesta) {
+                richiesta = requestAnimationFrame(aggiorna);
+            }
+        };
+
+        window.addEventListener('scroll', programma, { passive: true });
+        window.addEventListener('resize', programma);
+        aggiorna();
+    }
+</script>
+
+<style>
+    .barra-lettura {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        height: 3px;
+        pointer-events: none;
+    }
+
+    .riempimento {
+        height: 100%;
+        background: var(--serie);
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+</style>

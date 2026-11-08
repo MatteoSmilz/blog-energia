@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Articolo from '../../layouts/Articolo.astro';
 import { getArticoli, getQuintePerArticolo } from '../../lib/articoli';
+import { tempoDiLettura } from '../../lib/lettura';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -13,12 +14,33 @@ export async function getStaticPaths() {
 }
 
 const { articolo } = Astro.props;
-const { Content } = await render(articolo);
+const { Content, headings } = await render(articolo);
+const { titolo, sottotitolo, pubblicato, aggiornato, copertina, tag, serie } = articolo.data;
+
 const quinte = await getQuintePerArticolo(articolo.id);
-const { titolo, sottotitolo, pubblicato, copertina, tag, serie } = articolo.data;
+const minuti = tempoDiLettura(articolo.body ?? '');
+
+const dellaSerie = (await getArticoli()).filter((a) => a.data.serie === serie).reverse();
+const posizione = dellaSerie.findIndex((a) => a.id === articolo.id);
+const voce = (i: number) => {
+    const a = dellaSerie[i];
+    return a ? { titolo: a.data.titolo, href: url(`articoli/${a.id}`) } : undefined;
+};
 ---
 
-<Articolo titolo={titolo} sottotitolo={sottotitolo} pubblicato={pubblicato} copertina={copertina} tag={tag} serie={serie}>
+<Articolo
+    titolo={titolo}
+    sottotitolo={sottotitolo}
+    pubblicato={pubblicato}
+    aggiornato={aggiornato}
+    copertina={copertina}
+    tag={tag}
+    serie={serie}
+    intestazioni={headings}
+    minuti={minuti}
+    precedente={voce(posizione - 1)}
+    successivo={voce(posizione + 1)}
+>
     <Content />
     {quinte.length > 0 && (
         <aside class="quinte">
@@ -34,13 +56,24 @@ const { titolo, sottotitolo, pubblicato, copertina, tag, serie } = articolo.data
 
 <style>
     .quinte {
-        margin-top: 4rem;
-        padding: 1.5rem 2rem;
+        margin-top: var(--spazio-8);
+        padding: var(--spazio-5) var(--spazio-6);
         border: 1px solid var(--bordo);
-        border-radius: 0.75rem;
-    }
+        border-radius: var(--raggio);
 
-    .quinte h2 {
-        margin-top: 0;
+        & h2 {
+            margin: 0;
+            font-size: var(--titolo-3);
+        }
+
+        & ul {
+            margin: var(--spazio-3) 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        & a {
+            color: var(--serie);
+        }
     }
 </style>

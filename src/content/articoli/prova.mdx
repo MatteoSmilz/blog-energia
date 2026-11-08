@@ -1,9 +1,10 @@
 ---
 titolo: "Articolo di prova"
-descrizione: "Un articolo per verificare formule, citazioni e copertina."
+sottotitolo: "Un articolo lungo per verificare impaginazione, indice, note e componenti."
+descrizione: "Un articolo per verificare impaginazione, indice, note e componenti."
 pubblicato: 2026-11-07
 serie: cosmica
-tag: [prova]
+tag: [prova, impaginazione]
 copertina:
     immagine: ../../assets/articoli/prova.jpg
     alt: "Il Sole fotografato nell'ultravioletto"
@@ -11,63 +12,77 @@ copertina:
     link: "https://sdo.gsfc.nasa.gov/"
 ---
 
-import Figura from '../../components/Figura.astro';
-import sole from '../../assets/articoli/prova.jpg';
 import Nota from '../../components/Nota.astro';
 import Approfondimento from '../../components/Approfondimento.astro';
-import Video from '../../components/Video.astro';
+import Figura from '../../components/Figura.astro';
+import Simulazione from '../../components/Simulazione.astro';
+import Onda from '../../sim/prova/Onda.svelte';
+import prova from '../../assets/articoli/prova.jpg';
 
-Il Sole converte ogni secondo circa 4 milioni di tonnellate di materia in energia.<Nota>È la massa "mancante" tra quattro protoni e il nucleo di elio che formano: circa lo 0,7%.</Nota> Eppure brucerà ancora per miliardi di anni.
+Questo è il paragrafo di apertura, che il layout mostra un po' più grande degli altri. Serve a verificare che il primo paragrafo abbia uno stile diverso e che il passaggio dal titolo al testo sia graduale.
 
-Il Sole converte massa in energia secondo $E = mc^2$ [@einstein1905].
+Questo è un secondo paragrafo di prova. Il testo deve essere abbastanza lungo da occupare più righe, così si vede la larghezza della colonna e l'interlinea. Qui c'è anche un richiamo a una nota a margine.<Nota>Questa è la prima nota di prova: su schermo largo deve stare nella colonna di destra, accanto a questa riga.</Nota> Il paragrafo continua dopo la nota, sulla stessa riga.
+
+## Prima sezione di prova
+
+Questo paragrafo apre la prima sezione. Scorrendo la pagina, quando questo titolo arriva nella parte alta dello schermo, la voce corrispondente dell'indice deve evidenziarsi nel colore della serie.
+
+Un altro paragrafo con una seconda nota.<Nota>Seconda nota di prova, vicina alla prima: non devono sovrapporsi.</Nota> Poi un terzo richiamo poco dopo.<Nota>Terza nota di prova, per verificare che le note vicine si mettano una sotto l'altra.</Nota>
+
+> Questa è una citazione di prova: il bordo a sinistra deve avere il colore della serie.
+
+<Figura src={prova} alt="Prima immagine di prova" crediti="NASA/SDO" link="https://sdo.gsfc.nasa.gov/">
+    Una figura larga quanto il testo.
+</Figura>
+
+Paragrafo dopo la figura, per verificare la spaziatura tra immagine e testo.
+
+## Seconda sezione di prova
+
+Questa sezione contiene una formula. Prima la frase che la introduce, poi la formula centrata:
+
+$$
+P(E) \propto e^{-\sqrt{E_G / E}}
+$$
+
+Una formula nel testo, come $E = mc^2$, deve restare sulla stessa riga del paragrafo. Qui c'è anche una citazione bibliografica [@einstein1905].
 
 <Approfondimento titolo="Per chi vuole la matematica">
 
-La probabilità di attraversare la barriera di Coulomb dipende dall'energia come:
+Questo è il contenuto del box di approfondimento. Deve essere nascosto finché non lo apri.
 
 $$
-P(E) \propto e^{-\sqrt{E_G / E}}
+\Delta T = \frac{-Q}{m_{\text{tot}} \cdot c}
 $$
 
-dove $E_G$ è l'energia di Gamow.
+Anche le formule dentro il box devono essere renderizzate.
 
 </Approfondimento>
 
-$$
-P(E) \propto e^{-\sqrt{E_G / E}}
-$$
+### Una sottosezione
 
-<Video id="_wU4QYvuccM" titolo="Come funziona un tokamak" canale="Nome del canale" inizio={42} />
+Questa sottosezione usa un titolo `###`: non deve comparire nell'indice, che mostra solo i titoli principali.
 
-$$
-\Delta T_{\text{teorico}} = \frac{-Q}{m_{\text{tot}} \cdot c} = \frac{-n_{\text{sale}} \cdot \Delta H^\circ_{\text{sol}}}{(m_{\text{acqua}} + m_{\text{sale}}) \cdot c} = \frac{-\dfrac{m_{\text{sale}}}{M_{\text{sale}}} \cdot \Delta H^\circ_{\text{sol}}}{(m_{\text{acqua}} + m_{\text{sale}}) \cdot c} = \frac{-\dfrac{7{,}56\ \text{g}}{101{,}10\ \text{g/mol}} \cdot 34\,900\ \text{J/mol}}{(50{,}0\ \text{g} + 7{,}56\ \text{g}) \cdot 3{,}76\ \text{J/(g·K)}} \approx -12{,}1\ \text{K}
-$$
+- Primo elemento di un elenco di prova.
+- Secondo elemento, un po' più lungo, per vedere come va a capo quando la riga non basta.
+- Terzo elemento.
 
-import Galleria from '../../components/Galleria.astro';
-import foto1 from '../../assets/articoli/prova.jpg';
-import foto2 from '../../assets/articoli/prova.jpg';
-import foto3 from '../../assets/articoli/prova.jpg';
+## Terza sezione di prova
 
-<Galleria immagini={[
-    { src: foto1, alt: "Il becher con il nitrato di potassio", crediti: "Foto dell'autore" },
-    { src: foto2, alt: "Il termometro a 19 °C", crediti: "Foto dell'autore" },
-    { src: foto3, alt: "La bilancia con il campione", crediti: "Foto dell'autore" },
-]}>
-    Le fasi dell'esperimento sulle dissoluzioni endotermiche.
-</Galleria>
+Questa sezione contiene gli elementi larghi. La figura e la simulazione qui sotto devono arrivare fino al bordo destro delle note.
 
-<Figura src={sole} alt="Il Sole nell'ultravioletto estremo, con anelli di plasma sopra la superficie" crediti="NASA/SDO" link="https://sdo.gsfc.nasa.gov/" larghezza="ampia">
-    Il Sole fotografato dal satellite SDO alla lunghezza d'onda di 17,1 nm.
+<Figura src={prova} alt="Seconda immagine di prova" crediti="NASA/SDO" larghezza="ampia">
+    Una figura ampia: su schermo largo esce dalla colonna del testo.
 </Figura>
 
-
-import Simulazione from '../../components/Simulazione.astro';
-import Onda from '../../sim/prova/Onda.svelte';
-
-<Simulazione titolo="Un'onda di prova" quinte="prova">
+<Simulazione titolo="Un'onda di prova" quinte="prova" larghezza="ampia">
     <Onda client:visible />
     <span slot="didascalia">Sposta i cursori per cambiare frequenza e ampiezza.</span>
 </Simulazione>
+
+Questo paragrafo serve ad aggiungere lunghezza alla pagina, così la barra di avanzamento ha qualcosa da misurare. Questo paragrafo serve ad aggiungere lunghezza alla pagina, così la barra di avanzamento ha qualcosa da misurare.
+
+Un ultimo paragrafo prima della bibliografia, con una quarta nota.<Nota>Quarta nota di prova, l'ultima.</Nota>
 
 ## Bibliografia
 

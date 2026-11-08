@@ -63,7 +63,13 @@ const haDidascalia = Astro.slots.has('didascalia');
     }
 
     .ampia {
-        width: min(60rem, calc(100vw - 2 * var(--spazio-5)));
+        width: 100%;
+    }
+
+    @media (min-width: 68rem) {
+        .ampia {
+            width: calc(100% + var(--sporgenza));
+        }
     }
 
     .barra {
