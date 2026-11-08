@@ -47,13 +47,13 @@ The site is then available at http://localhost:4321/blog-energia/.
 
 ## Commands
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | development server with hot reload |
-| `npm run dati` | regenerate data produced by the Python scripts |
-| `npm test` | run the simulation tests |
-| `npm run build` | build the static site into `dist/` |
-| `npm run preview` | preview the production build |
+| Command           | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `npm run dev`     | development server with hot reload             |
+| `npm run dati`    | regenerate data produced by the Python scripts |
+| `npm test`        | run the simulation tests                       |
+| `npm run build`   | build the static site into `dist/`             |
+| `npm run preview` | preview the production build                   |
 
 ## License
 

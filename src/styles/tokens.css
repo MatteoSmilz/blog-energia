@@ -25,7 +25,7 @@
     /* Caratteri */
     --font-titoli: var(--font-bricolage);
     --font-testo: var(--font-literata);
-    --font-codice: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+    --font-codice: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
 
     /* Dimensioni del testo */
     --testo-piccolo: 0.875rem;
@@ -66,14 +66,14 @@
     --plot-background: var(--superficie);
 }
 
-[data-serie='cellulare'] {
+[data-serie="cellulare"] {
     --serie: var(--colore-cellulare);
 }
 
-[data-serie='terrestre'] {
+[data-serie="terrestre"] {
     --serie: var(--colore-terrestre);
 }
 
-[data-serie='cosmica'] {
+[data-serie="cosmica"] {
     --serie: var(--colore-cosmica);
 }

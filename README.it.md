@@ -47,13 +47,13 @@ Il sito è poi disponibile su http://localhost:4321/blog-energia/.
 
 ## Comandi
 
-| Comando | Cosa fa |
-| --- | --- |
-| `npm run dev` | server di sviluppo con ricaricamento automatico |
-| `npm run dati` | rigenera i dati prodotti dagli script Python |
-| `npm test` | esegue i test delle simulazioni |
-| `npm run build` | genera il sito statico in `dist/` |
-| `npm run preview` | mostra la build come sarà pubblicata |
+| Comando           | Cosa fa                                         |
+| ----------------- | ----------------------------------------------- |
+| `npm run dev`     | server di sviluppo con ricaricamento automatico |
+| `npm run dati`    | rigenera i dati prodotti dagli script Python    |
+| `npm test`        | esegue i test delle simulazioni                 |
+| `npm run build`   | genera il sito statico in `dist/`               |
+| `npm run preview` | mostra la build come sarà pubblicata            |
 
 ## Licenza
 
