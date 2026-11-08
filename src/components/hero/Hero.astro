@@ -1,0 +1,106 @@
+---
+import Sole from './Sole.astro';
+import MitocondrioHero from './MitocondrioHero.astro';
+
+interface Props {
+    href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<section class="hero">
+    <Sole />
+    <div class="contenuto">
+        <h1>Le centrali della natura</h1>
+        <p class="sottotitolo">dalla cellula alle stelle</p>
+        <div class="introduzione">
+            <slot name="introduzione" />
+        </div>
+        <a class="pulsante" href={href}>Inizia il viaggio</a>
+        <div class="mitocondrio">
+            <MitocondrioHero />
+        </div>
+    </div>
+    <div class="sfumatura" aria-hidden="true"></div>
+</section>
+
+<style>
+    .hero {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        min-height: clamp(36rem, 90vh, 56rem);
+    }
+
+    .contenuto {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: var(--larghezza-pagina);
+        margin: 0 auto;
+        padding: clamp(7rem, 14vh, 11rem) var(--spazio-5) var(--spazio-7);
+    }
+
+    h1 {
+        max-width: 11ch;
+        margin: 0;
+        font-size: var(--titolo-hero);
+        line-height: 0.96;
+        letter-spacing: -0.035em;
+        text-shadow: 0 2px 24px rgba(15, 22, 38, 0.7);
+    }
+
+    .sottotitolo {
+        margin: var(--spazio-3) 0 0;
+        font-family: var(--font-titoli);
+        font-size: clamp(1.25rem, 1rem + 1.2vw, 2rem);
+        font-weight: 600;
+        color: var(--testo-chiaro);
+        text-shadow: 0 2px 16px rgba(15, 22, 38, 0.7);
+    }
+
+    .introduzione {
+        max-width: 32rem;
+        margin-top: var(--spazio-5);
+        font-size: var(--testo-grande);
+        color: var(--testo-chiaro);
+    }
+
+    .pulsante {
+        display: inline-flex;
+        align-items: center;
+        min-height: 3.25rem;
+        margin-top: var(--spazio-6);
+        padding: 0 1.75rem;
+        background: var(--accento);
+        color: var(--accento-testo);
+        border-radius: var(--raggio-pillola);
+        font-family: var(--font-titoli);
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: transform var(--durata);
+
+        &:hover {
+            color: var(--accento-testo);
+            transform: translateY(-2px);
+        }
+    }
+
+    .mitocondrio {
+        margin-top: clamp(2rem, 6vh, 4rem);
+    }
+
+    .sfumatura {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 12rem;
+        background: linear-gradient(to bottom, transparent, var(--sfondo));
+        pointer-events: none;
+    }
+</style>

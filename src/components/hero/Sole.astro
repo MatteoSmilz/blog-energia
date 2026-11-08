@@ -1,0 +1,59 @@
+<div class="sole" aria-hidden="true">
+    <div class="centro">
+        <div class="alone lontano"></div>
+        <div class="alone vicino"></div>
+        <div class="disco"></div>
+    </div>
+</div>
+
+<style>
+    .sole {
+        --diametro: clamp(16rem, 50vw, 40rem);
+
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .centro {
+        position: absolute;
+        left: 78%;
+        top: clamp(9rem, 26vw, 21rem);
+    }
+
+    .alone,
+    .disco {
+        position: absolute;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .lontano {
+        width: calc(var(--diametro) * 2.2);
+        aspect-ratio: 1;
+        background: radial-gradient(circle, rgba(255, 170, 60, 0.28) 0%, rgba(242, 116, 31, 0.1) 38%, rgba(15, 22, 38, 0) 62%);
+    }
+
+    .vicino {
+        width: calc(var(--diametro) * 1.4);
+        aspect-ratio: 1;
+        background: radial-gradient(circle, rgba(255, 200, 110, 0.35) 0%, rgba(255, 140, 40, 0.12) 50%, rgba(15, 22, 38, 0) 70%);
+    }
+
+    .disco {
+        width: var(--diametro);
+        aspect-ratio: 1;
+        background: radial-gradient(
+            circle at 46% 44%,
+            #fffdf4 0%,
+            #fff0b8 22%,
+            #ffc65a 48%,
+            #f58a1f 74%,
+            #d9541a 92%,
+            #b8400f 100%
+        );
+        box-shadow: 0 0 120px 40px rgba(255, 150, 40, 0.35);
+    }
+</style>

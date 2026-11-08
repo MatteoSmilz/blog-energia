@@ -6,8 +6,12 @@ import { url } from '../lib/url';
 
 interface Props {
     titolo: string;
+    headerSovrapposto?: boolean;
 }
-const { titolo } = Astro.props;
+
+const { titolo, headerSovrapposto = false } = Astro.props;
+const NOME = 'Le centrali della natura';
+const titoloPagina = titolo === NOME ? NOME : `${titolo} · ${NOME}`;
 ---
 
 <!doctype html>
@@ -15,20 +19,73 @@ const { titolo } = Astro.props;
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href={url('favicon.svg')} />
         <Font cssVariable="--font-bricolage" preload />
         <Font cssVariable="--font-literata" />
-        <link rel="icon" href={url('favicon.svg')} />
-        <title>{titolo}</title>
+        <title>{titoloPagina}</title>
     </head>
     <body>
-        <header>
-            <a href={url()}>Home</a>
-            <a href={url('articoli')}>Articoli</a>
-            <a href={url('relazioni')}>Relazioni</a>
-            <a href={url('dietro-le-quinte')}>Dietro le quinte</a>
+        <header class:list={['intestazione', headerSovrapposto && 'sovrapposta']}>
+            <div class="contenitore">
+                <a href={url()} class="marchio">{NOME}</a>
+                <nav aria-label="Principale">
+                    <a href={url('articoli')}>Articoli</a>
+                    <a href={url('relazioni')}>Relazioni</a>
+                    <a href={url('dietro-le-quinte')}>Dietro le quinte</a>
+                    <a href={url('chi-sono')}>Chi sono</a>
+                </nav>
+            </div>
         </header>
+        <slot name="hero" />
         <main>
             <slot />
         </main>
     </body>
 </html>
+
+<style>
+    .intestazione {
+        position: relative;
+        z-index: 10;
+    }
+
+    .sovrapposta {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .contenitore {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--spazio-4);
+        max-width: var(--larghezza-pagina);
+        margin: 0 auto;
+        padding: var(--spazio-5);
+    }
+
+    .marchio {
+        font-family: var(--font-titoli);
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spazio-2) var(--spazio-5);
+        padding: var(--spazio-2) var(--spazio-5);
+        background: rgba(15, 22, 38, 0.72);
+        backdrop-filter: blur(8px);
+        border-radius: var(--raggio-pillola);
+        font-family: var(--font-titoli);
+    }
+
+    nav a {
+        text-decoration: none;
+    }
+</style>

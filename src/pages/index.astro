@@ -1,18 +1,30 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/hero/Hero.astro';
 import Scheda from '../components/Scheda.astro';
-import { getArticoli, scegliInEvidenza } from '../lib/articoli';
-import { url } from '../lib/url';
 import RighelloEnergia from '../components/RighelloEnergia.astro';
+import { getArticoli, scegliInEvidenza } from '../lib/articoli';
 import { EVENTI_HOME } from '../data/eventi-energia';
+import { url } from '../lib/url';
 
 const articoli = await getArticoli();
 const inEvidenza = scegliInEvidenza(articoli);
 const altri = articoli.filter((a) => a !== inEvidenza);
+
+const primoCellulare = articoli.filter((a) => a.data.serie === 'cellulare').at(-1);
+const inizioViaggio = primoCellulare ? url(`articoli/${primoCellulare.id}`) : url('articoli');
 ---
 
-<Base titolo="Le centrali della natura">
-    <h1>Le centrali della natura</h1>
+<Base titolo="Le centrali della natura" headerSovrapposto>
+    <Hero slot="hero" href={inizioViaggio}>
+        <Fragment slot="introduzione">
+            [Una o due frasi tue che presentano il blog e il viaggio attraverso le scale.]
+        </Fragment>
+        <Fragment slot="didascalia">
+            Un mitocondrio misura circa un millesimo di millimetro, il Sole quasi un milione e mezzo di chilometri. [La tua frase che li collega.]
+        </Fragment>
+    </Hero>
+
     <section class="energia">
         <h2>Quanta energia libera un singolo evento?</h2>
         <RighelloEnergia eventi={EVENTI_HOME}>
@@ -21,10 +33,10 @@ const altri = articoli.filter((a) => a !== inEvidenza);
             </Fragment>
         </RighelloEnergia>
     </section>
+
     {inEvidenza && (
         <Scheda
             variante="grande"
-            priorita
             titolo={inEvidenza.data.titolo}
             href={url(`articoli/${inEvidenza.id}`)}
             pubblicato={inEvidenza.data.pubblicato}
