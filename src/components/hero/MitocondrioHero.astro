@@ -1,99 +1,207 @@
-<svg
-    class="mitocondrio"
-    viewBox="0 0 520 280"
-    role="img"
-    aria-label="Un mitocondrio sezionato, con le creste interne in vista"
->
-    <defs>
-        <radialGradient id="mitoCorpo" cx="38%" cy="28%" r="80%">
-            <stop offset="0%" stop-color="#c6f7e2"></stop>
-            <stop offset="30%" stop-color="#62d6ab"></stop>
-            <stop offset="70%" stop-color="#1e8a67"></stop>
-            <stop offset="100%" stop-color="#0b4536"></stop>
-        </radialGradient>
-        <linearGradient id="mitoInterno" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#0a2f27"></stop>
-            <stop offset="100%" stop-color="#15594a"></stop>
-        </linearGradient>
-        <linearGradient id="mitoCresta" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#2fa57d"></stop>
-            <stop offset="50%" stop-color="#8fedc7"></stop>
-            <stop offset="100%" stop-color="#2fa57d"></stop>
-        </linearGradient>
-        <radialGradient id="mitoRiflesso" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"></stop>
-            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
-        </radialGradient>
-        <filter id="mitoSfoca" x="-20%" y="-50%" width="140%" height="200%">
-            <feGaussianBlur stdDeviation="10"></feGaussianBlur>
-        </filter>
-    </defs>
-    <ellipse
-        cx="270"
-        cy="250"
-        rx="210"
-        ry="16"
-        fill="#000000"
-        opacity="0.45"
-        filter="url(#mitoSfoca)"
-    ></ellipse>
-    <rect x="20" y="30" width="480" height="200" rx="100" fill="url(#mitoCorpo)"></rect>
-    <ellipse cx="262" cy="126" rx="196" ry="66" fill="url(#mitoInterno)"></ellipse>
-    <path
-        d="M118 84 Q134 126 118 172 Q102 126 118 84 Z"
-        fill="url(#mitoCresta)"
-        opacity="0.85"
-    ></path>
-    <path
-        d="M166 66 Q186 126 166 188 Q146 126 166 66 Z"
-        fill="url(#mitoCresta)"
-        opacity="0.9"
-    ></path>
-    <path d="M216 60 Q238 126 216 192 Q194 126 216 60 Z" fill="url(#mitoCresta)"></path>
-    <path d="M266 60 Q288 126 266 192 Q244 126 266 60 Z" fill="url(#mitoCresta)"></path>
-    <path d="M316 62 Q338 126 316 190 Q294 126 316 62 Z" fill="url(#mitoCresta)"></path>
-    <path
-        d="M364 70 Q384 126 364 182 Q344 126 364 70 Z"
-        fill="url(#mitoCresta)"
-        opacity="0.9"
-    ></path>
-    <path
-        d="M408 88 Q422 126 408 166 Q394 126 408 88 Z"
-        fill="url(#mitoCresta)"
-        opacity="0.85"
-    ></path>
-    <ellipse
-        cx="262"
-        cy="126"
-        rx="196"
-        ry="66"
-        fill="none"
-        stroke="#b4f4d9"
-        stroke-width="3"
-    ></ellipse>
-    <ellipse
-        cx="262"
-        cy="126"
-        rx="184"
-        ry="56"
-        fill="none"
-        stroke="#5fd3a8"
-        stroke-opacity="0.5"
-        stroke-width="1.5"
-    ></ellipse>
-    <circle cx="192" cy="150" r="3.5" fill="#f2b84b"></circle>
-    <circle cx="242" cy="100" r="3.5" fill="#f2b84b"></circle>
-    <circle cx="292" cy="156" r="3.5" fill="#f2b84b"></circle>
-    <circle cx="340" cy="104" r="3.5" fill="#f2b84b"></circle>
-    <ellipse cx="150" cy="56" rx="90" ry="16" fill="url(#mitoRiflesso)"></ellipse>
-</svg>
+<div class="mitocondrio" data-parallasse>
+    <div class="inclinazione">
+        <svg
+            viewBox="0 0 520 280"
+            role="img"
+            aria-label="Un mitocondrio sezionato, con le creste interne in vista"
+        >
+            <defs>
+                <radialGradient id="mitoCorpo" cx="38%" cy="28%" r="80%">
+                    <stop offset="0%" stop-color="#c6f7e2"></stop>
+                    <stop offset="30%" stop-color="#62d6ab"></stop>
+                    <stop offset="70%" stop-color="#1e8a67"></stop>
+                    <stop offset="100%" stop-color="#0b4536"></stop>
+                </radialGradient>
+                <linearGradient id="mitoInterno" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0a2f27"></stop>
+                    <stop offset="100%" stop-color="#15594a"></stop>
+                </linearGradient>
+                <linearGradient id="mitoCresta" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#2fa57d"></stop>
+                    <stop offset="50%" stop-color="#8fedc7"></stop>
+                    <stop offset="100%" stop-color="#2fa57d"></stop>
+                </linearGradient>
+                <radialGradient id="mitoRiflesso" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"></stop>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
+                </radialGradient>
+                <filter id="mitoSfoca" x="-20%" y="-50%" width="140%" height="200%">
+                    <feGaussianBlur stdDeviation="10"></feGaussianBlur>
+                </filter>
+                <clipPath id="mitoApertura">
+                    <ellipse cx="262" cy="126" rx="196" ry="66"></ellipse>
+                </clipPath>
+            </defs>
+
+            <g class="strato" style="--p: -6">
+                <ellipse
+                    cx="270"
+                    cy="250"
+                    rx="210"
+                    ry="16"
+                    fill="#000000"
+                    opacity="0.45"
+                    filter="url(#mitoSfoca)"
+                ></ellipse>
+            </g>
+
+            <g class="strato" style="--p: 4">
+                <rect x="20" y="30" width="480" height="200" rx="100" fill="url(#mitoCorpo)"></rect>
+                <g clip-path="url(#mitoApertura)">
+                    <g class="strato" style="--p: 2">
+                        <ellipse
+                            cx="262"
+                            cy="126"
+                            rx="210"
+                            ry="80"
+                            fill="url(#mitoInterno)"
+                        ></ellipse>
+                    </g>
+                    <g class="strato" style="--p: 9">
+                        <path
+                            d="M118 84 Q134 126 118 172 Q102 126 118 84 Z"
+                            fill="url(#mitoCresta)"
+                            opacity="0.85"
+                        ></path>
+                        <path
+                            d="M166 66 Q186 126 166 188 Q146 126 166 66 Z"
+                            fill="url(#mitoCresta)"
+                            opacity="0.9"
+                        ></path>
+                        <path
+                            d="M216 60 Q238 126 216 192 Q194 126 216 60 Z"
+                            fill="url(#mitoCresta)"
+                        ></path>
+                        <path
+                            d="M266 60 Q288 126 266 192 Q244 126 266 60 Z"
+                            fill="url(#mitoCresta)"
+                        ></path>
+                        <path
+                            d="M316 62 Q338 126 316 190 Q294 126 316 62 Z"
+                            fill="url(#mitoCresta)"
+                        ></path>
+                        <path
+                            d="M364 70 Q384 126 364 182 Q344 126 364 70 Z"
+                            fill="url(#mitoCresta)"
+                            opacity="0.9"
+                        ></path>
+                        <path
+                            d="M408 88 Q422 126 408 166 Q394 126 408 88 Z"
+                            fill="url(#mitoCresta)"
+                            opacity="0.85"
+                        ></path>
+                    </g>
+                    <g class="strato" style="--p: 13">
+                        <circle cx="192" cy="150" r="3.5" fill="#f2b84b"></circle>
+                        <circle cx="242" cy="100" r="3.5" fill="#f2b84b"></circle>
+                        <circle cx="292" cy="156" r="3.5" fill="#f2b84b"></circle>
+                        <circle cx="340" cy="104" r="3.5" fill="#f2b84b"></circle>
+                    </g>
+                </g>
+                <ellipse
+                    cx="262"
+                    cy="126"
+                    rx="196"
+                    ry="66"
+                    fill="none"
+                    stroke="#b4f4d9"
+                    stroke-width="3"
+                ></ellipse>
+                <ellipse
+                    cx="262"
+                    cy="126"
+                    rx="184"
+                    ry="56"
+                    fill="none"
+                    stroke="#5fd3a8"
+                    stroke-opacity="0.5"
+                    stroke-width="1.5"
+                ></ellipse>
+            </g>
+
+            <g class="strato" style="--p: 24">
+                <ellipse cx="150" cy="56" rx="90" ry="16" fill="url(#mitoRiflesso)"></ellipse>
+            </g>
+        </svg>
+    </div>
+</div>
+
+<script>
+    const contenitore = document.querySelector<HTMLElement>('[data-parallasse]');
+    const hero = contenitore?.closest<HTMLElement>('.hero');
+    const movimentoRidotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (contenitore && hero && !movimentoRidotto) {
+        const limita = (valore: number) => Math.max(-1, Math.min(1, valore));
+        let ultimo: PointerEvent | null = null;
+        let richiesta = 0;
+
+        const aggiorna = () => {
+            richiesta = 0;
+            if (!ultimo) {
+                return;
+            }
+            const area = hero.getBoundingClientRect();
+            const centro = contenitore.getBoundingClientRect();
+            const x = (ultimo.clientX - (centro.left + centro.width / 2)) / (area.width / 2);
+            const y = (ultimo.clientY - (centro.top + centro.height / 2)) / (area.height / 2);
+            contenitore.style.setProperty('--x', limita(x).toFixed(3));
+            contenitore.style.setProperty('--y', limita(y).toFixed(3));
+        };
+
+        hero.addEventListener('pointermove', (evento) => {
+            if (evento.pointerType !== 'mouse') {
+                return;
+            }
+            contenitore.classList.remove('a-riposo');
+            ultimo = evento;
+            if (!richiesta) {
+                richiesta = requestAnimationFrame(aggiorna);
+            }
+        });
+
+        hero.addEventListener('pointerleave', () => {
+            ultimo = null;
+            contenitore.classList.add('a-riposo');
+            contenitore.style.setProperty('--x', '0');
+            contenitore.style.setProperty('--y', '0');
+        });
+    }
+</script>
 
 <style>
     .mitocondrio {
+        --x: 0;
+        --y: 0;
+        --durata-segui: 0.3s;
+        --curva-segui: ease-out;
+
         width: clamp(16rem, 40vw, 32.5rem);
+        perspective: 900px;
+    }
+
+    .a-riposo {
+        --durata-segui: 1.6s;
+        --curva-segui: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .inclinazione {
+        transform: rotateY(calc(var(--x) * 10deg)) rotateX(calc(var(--y) * -8deg));
+        transition: transform var(--durata-segui) var(--curva-segui);
+    }
+
+    svg {
+        display: block;
+        width: 100%;
         height: auto;
+        overflow: visible;
         filter: drop-shadow(0 0 32px rgba(95, 211, 168, 0.4));
         animation: fluttua 11s ease-in-out infinite alternate;
+    }
+
+    .strato {
+        transform: translate(calc(var(--x) * var(--p) * 1px), calc(var(--y) * var(--p) * 1px));
+        transition: transform var(--durata-segui) var(--curva-segui);
     }
 
     @keyframes fluttua {
