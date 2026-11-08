@@ -1,0 +1,142 @@
+---
+import { url } from '../lib/url';
+
+interface Props {
+    titolo: string;
+    quinte?: string;
+    larghezza?: 'testo' | 'ampia';
+}
+
+const { titolo, quinte, larghezza = 'testo' } = Astro.props;
+const haDidascalia = Astro.slots.has('didascalia');
+---
+
+<figure class:list={['simulazione', larghezza]} data-simulazione>
+    <div class="barra">
+        <span class="titolo">{titolo}</span>
+        <button type="button" class="schermo-intero" aria-label="Schermo intero" aria-pressed="false" hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"></path>
+            </svg>
+        </button>
+    </div>
+    <div class="corpo">
+        <slot />
+        <noscript>
+            <p class="avviso">Questa simulazione funziona solo con JavaScript attivo.</p>
+        </noscript>
+    </div>
+    {(haDidascalia || quinte) && (
+        <figcaption>
+            {haDidascalia && <slot name="didascalia" />}
+            {quinte && <a href={url(`dietro-le-quinte/${quinte}`)}>Come l'ho costruita</a>}
+        </figcaption>
+    )}
+</figure>
+
+<script>
+    for (const cornice of document.querySelectorAll<HTMLElement>('[data-simulazione]')) {
+        const pulsante = cornice.querySelector<HTMLButtonElement>('.schermo-intero');
+        if (!pulsante || !document.fullscreenEnabled) continue;
+
+        pulsante.hidden = false;
+        pulsante.addEventListener('click', () => {
+            if (document.fullscreenElement === cornice) {
+                document.exitFullscreen();
+            } else {
+                cornice.requestFullscreen();
+            }
+        });
+        document.addEventListener('fullscreenchange', () => {
+            pulsante.setAttribute('aria-pressed', String(document.fullscreenElement === cornice));
+        });
+    }
+</script>
+
+<style>
+    .simulazione {
+        margin: var(--spazio-7) 0;
+        padding: var(--spazio-4) var(--spazio-5) var(--spazio-5);
+        background: var(--superficie);
+        border: 1px solid var(--bordo);
+        border-radius: var(--raggio-grande);
+    }
+
+    .ampia {
+        width: min(60rem, calc(100vw - 2 * var(--spazio-5)));
+    }
+
+    .barra {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--spazio-4);
+        margin-bottom: var(--spazio-4);
+    }
+
+    .titolo {
+        font-family: var(--font-titoli);
+        font-weight: 600;
+        color: var(--serie);
+    }
+
+    .schermo-intero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        background: var(--superficie-alta);
+        color: var(--testo);
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    .corpo :global(.controlli) {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: var(--spazio-4) var(--spazio-6);
+        margin-top: var(--spazio-4);
+    }
+
+    .avviso {
+        margin: 0;
+        padding: var(--spazio-5);
+        text-align: center;
+        color: var(--testo-tenue);
+    }
+
+    figcaption {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: var(--spazio-3);
+        margin-top: var(--spazio-4);
+        font-size: var(--testo-piccolo);
+        color: var(--testo-chiaro);
+    }
+
+    .simulazione:fullscreen {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: var(--spazio-6);
+        background: var(--sfondo);
+        border: 0;
+        border-radius: 0;
+        overflow: auto;
+    }
+
+    .simulazione:fullscreen :global(canvas) {
+        width: auto;
+        height: 70vh;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+</style>

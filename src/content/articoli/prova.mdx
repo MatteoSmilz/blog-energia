@@ -60,6 +60,15 @@ import foto3 from '../../assets/articoli/prova.jpg';
     Il Sole fotografato dal satellite SDO alla lunghezza d'onda di 17,1 nm.
 </Figura>
 
+
+import Simulazione from '../../components/Simulazione.astro';
+import Onda from '../../sim/prova/Onda.svelte';
+
+<Simulazione titolo="Un'onda di prova" quinte="prova">
+    <Onda client:visible />
+    <span slot="didascalia">Sposta i cursori per cambiare frequenza e ampiezza.</span>
+</Simulazione>
+
 ## Bibliografia
 
 [^ref]
