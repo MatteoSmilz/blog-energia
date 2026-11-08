@@ -1,0 +1,58 @@
+---
+interface Props {
+    titolo?: string;
+}
+
+const { titolo = 'Approfondimento' } = Astro.props;
+---
+
+<details class="approfondimento">
+    <summary>{titolo}</summary>
+    <div class="contenuto">
+        <slot />
+    </div>
+</details>
+
+<style>
+    .approfondimento {
+        margin: var(--spazio-6) 0;
+        background: var(--superficie);
+        border: 1px solid var(--bordo);
+        border-radius: var(--raggio);
+    }
+
+    summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--spazio-4);
+        padding: var(--spazio-4) var(--spazio-5);
+        font-family: var(--font-titoli);
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::after {
+            content: '+';
+            font-size: 1.4em;
+            line-height: 1;
+            color: var(--serie);
+        }
+    }
+
+    details[open] summary::after {
+        content: '−';
+    }
+
+    .contenuto {
+        padding: 0 var(--spazio-5) var(--spazio-5);
+
+        & > :global(* + *) {
+            margin-top: var(--spazio-4);
+        }
+    }
+</style>

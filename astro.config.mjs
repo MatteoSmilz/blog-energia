@@ -10,6 +10,9 @@ export default defineConfig({
     site: 'https://matteosmilz.github.io',
     base: '/blog-energia',
     integrations: [mdx(), svelte()],
+    image: {
+        domains: ['i.ytimg.com'],
+    },
     fonts: [
         {
             provider: fontProviders.fontsource(),

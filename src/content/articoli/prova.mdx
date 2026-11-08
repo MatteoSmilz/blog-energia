@@ -13,16 +13,48 @@ copertina:
 
 import Figura from '../../components/Figura.astro';
 import sole from '../../assets/articoli/prova.jpg';
+import Nota from '../../components/Nota.astro';
+import Approfondimento from '../../components/Approfondimento.astro';
+import Video from '../../components/Video.astro';
+
+Il Sole converte ogni secondo circa 4 milioni di tonnellate di materia in energia.<Nota>È la massa "mancante" tra quattro protoni e il nucleo di elio che formano: circa lo 0,7%.</Nota> Eppure brucerà ancora per miliardi di anni.
 
 Il Sole converte massa in energia secondo $E = mc^2$ [@einstein1905].
+
+<Approfondimento titolo="Per chi vuole la matematica">
+
+La probabilità di attraversare la barriera di Coulomb dipende dall'energia come:
 
 $$
 P(E) \propto e^{-\sqrt{E_G / E}}
 $$
 
+dove $E_G$ è l'energia di Gamow.
+
+</Approfondimento>
+
+$$
+P(E) \propto e^{-\sqrt{E_G / E}}
+$$
+
+<Video id="_wU4QYvuccM" titolo="Come funziona un tokamak" canale="Nome del canale" inizio={42} />
+
 $$
 \Delta T_{\text{teorico}} = \frac{-Q}{m_{\text{tot}} \cdot c} = \frac{-n_{\text{sale}} \cdot \Delta H^\circ_{\text{sol}}}{(m_{\text{acqua}} + m_{\text{sale}}) \cdot c} = \frac{-\dfrac{m_{\text{sale}}}{M_{\text{sale}}} \cdot \Delta H^\circ_{\text{sol}}}{(m_{\text{acqua}} + m_{\text{sale}}) \cdot c} = \frac{-\dfrac{7{,}56\ \text{g}}{101{,}10\ \text{g/mol}} \cdot 34\,900\ \text{J/mol}}{(50{,}0\ \text{g} + 7{,}56\ \text{g}) \cdot 3{,}76\ \text{J/(g·K)}} \approx -12{,}1\ \text{K}
 $$
+
+import Galleria from '../../components/Galleria.astro';
+import foto1 from '../../assets/articoli/prova.jpg';
+import foto2 from '../../assets/articoli/prova.jpg';
+import foto3 from '../../assets/articoli/prova.jpg';
+
+<Galleria immagini={[
+    { src: foto1, alt: "Il becher con il nitrato di potassio", crediti: "Foto dell'autore" },
+    { src: foto2, alt: "Il termometro a 19 °C", crediti: "Foto dell'autore" },
+    { src: foto3, alt: "La bilancia con il campione", crediti: "Foto dell'autore" },
+]}>
+    Le fasi dell'esperimento sulle dissoluzioni endotermiche.
+</Galleria>
 
 <Figura src={sole} alt="Il Sole nell'ultravioletto estremo, con anelli di plasma sopra la superficie" crediti="NASA/SDO" link="https://sdo.gsfc.nasa.gov/" larghezza="ampia">
     Il Sole fotografato dal satellite SDO alla lunghezza d'onda di 17,1 nm.

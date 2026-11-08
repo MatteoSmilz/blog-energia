@@ -1,0 +1,84 @@
+---
+const id = `nota-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<span class="nota-gruppo"><input type="checkbox" id={id} class="interruttore" /><label for={id} class="richiamo" aria-label="Mostra o nascondi la nota"></label><span class="nota"><slot /></span></span>
+
+<style>
+    .nota-gruppo {
+        counter-increment: nota;
+    }
+
+    .interruttore {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+    }
+
+    .richiamo {
+        cursor: pointer;
+
+        &::after {
+            content: counter(nota);
+            padding: 0 0.1em;
+            font-family: var(--font-titoli);
+            font-size: 0.7em;
+            font-weight: 700;
+            line-height: 0;
+            vertical-align: super;
+            color: var(--serie);
+        }
+    }
+
+    .interruttore:focus-visible + .richiamo {
+        outline: 2px solid var(--accento);
+        outline-offset: 2px;
+        border-radius: var(--raggio-piccolo);
+    }
+
+    .nota {
+        display: none;
+        font-size: var(--testo-piccolo);
+        line-height: 1.5;
+        color: var(--testo-chiaro);
+
+        &::before {
+            content: counter(nota) '. ';
+            font-family: var(--font-titoli);
+            font-weight: 700;
+            color: var(--serie);
+        }
+    }
+
+    .interruttore:checked ~ .nota {
+        display: block;
+        margin: var(--spazio-3) 0;
+        padding: var(--spazio-3) var(--spazio-4);
+        background: var(--superficie);
+        border-left: 3px solid var(--serie);
+        border-radius: 0 var(--raggio-piccolo) var(--raggio-piccolo) 0;
+    }
+
+    @media (min-width: 68rem) {
+        .interruttore {
+            display: none;
+        }
+
+        .richiamo {
+            cursor: default;
+        }
+
+        .nota,
+        .interruttore:checked ~ .nota {
+            display: block;
+            float: right;
+            clear: right;
+            width: 15rem;
+            margin: 0 -18rem var(--spazio-4) 0;
+            padding: 0;
+            background: none;
+            border: 0;
+        }
+    }
+</style>

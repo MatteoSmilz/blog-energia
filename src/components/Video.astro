@@ -1,0 +1,114 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+    id: string;
+    titolo: string;
+    canale: string;
+    inizio?: number;
+}
+
+const { id, titolo, canale, inizio } = Astro.props;
+const parametri = new URLSearchParams({ autoplay: '1' });
+if (inizio) {
+    parametri.set('start', String(inizio));
+}
+const indirizzo = `https://www.youtube-nocookie.com/embed/${id}?${parametri}`;
+---
+
+<figure class="video">
+    <div class="cornice" data-indirizzo={indirizzo} data-titolo={titolo}>
+        <Image src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" inferSize />
+        <button type="button" class="avvia" aria-label={`Riproduci il video: ${titolo}`}>
+            <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 5v14l11-7z" fill="currentColor"></path>
+            </svg>
+        </button>
+    </div>
+    <figcaption>
+        <span class="titolo">{titolo}</span>
+        <span class="crediti">Video: {canale}, su YouTube. Il lettore si carica solo quando premi play.</span>
+    </figcaption>
+</figure>
+
+<script>
+    for (const cornice of document.querySelectorAll<HTMLElement>('.video .cornice')) {
+        const pulsante = cornice.querySelector('button');
+        pulsante?.addEventListener(
+            'click',
+            () => {
+                const iframe = document.createElement('iframe');
+                iframe.src = cornice.dataset.indirizzo!;
+                iframe.title = cornice.dataset.titolo!;
+                iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+                iframe.allowFullscreen = true;
+                cornice.replaceChildren(iframe);
+            },
+            { once: true },
+        );
+    }
+</script>
+
+<style>
+    .video {
+        margin: var(--spazio-7) 0;
+    }
+
+    .cornice {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 16 / 9;
+        background: var(--superficie);
+        border-radius: var(--raggio);
+    }
+
+    .cornice :global(img),
+    .cornice :global(iframe) {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        object-fit: cover;
+    }
+
+    .avvia {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 4.5rem;
+        height: 4.5rem;
+        padding-left: 0.25rem;
+        background: var(--accento);
+        color: var(--accento-testo);
+        border: 0;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        transition: transform var(--durata);
+
+        &:hover {
+            transform: translate(-50%, -50%) scale(1.08);
+        }
+    }
+
+    figcaption {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spazio-1);
+        margin-top: var(--spazio-3);
+        font-size: var(--testo-piccolo);
+    }
+
+    .titolo {
+        font-family: var(--font-titoli);
+        font-weight: 600;
+    }
+
+    .crediti {
+        color: var(--testo-tenue);
+    }
+</style>
