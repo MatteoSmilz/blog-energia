@@ -1,0 +1,103 @@
+---
+import { Image } from 'astro:assets';
+import Icona from './icone/Icona.astro';
+import type { InfoSerie, Serie } from '../lib/serie';
+
+interface Props {
+    serie: Serie;
+    info: InfoSerie;
+    href: string;
+    numeroArticoli: number;
+}
+
+const { serie, info, href, numeroArticoli } = Astro.props;
+const conteggio =
+    numeroArticoli === 0 ? 'In arrivo' : numeroArticoli === 1 ? '1 articolo' : `${numeroArticoli} articoli`;
+---
+
+<a class="scheda-serie" href={href} data-serie={serie}>
+    <div class="copertina">
+        {info.copertina ? (
+            <Image src={info.copertina} alt="" widths={[400, 800]} sizes="(max-width: 700px) 100vw, 380px" />
+        ) : (
+            <div class="segnaposto">
+                <Icona nome={info.icona} dimensione={80} />
+            </div>
+        )}
+    </div>
+    <div class="testo">
+        <h3>{info.nome}</h3>
+        <p>{info.descrizione}</p>
+        <span class="conteggio">{conteggio}</span>
+    </div>
+</a>
+
+<style>
+    .scheda-serie {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--superficie);
+        border-radius: var(--raggio-grande);
+        color: var(--testo);
+        text-decoration: none;
+        transition: background var(--durata);
+
+        &:hover {
+            background: var(--superficie-alta);
+        }
+
+        &:hover :global(img) {
+            transform: scale(1.03);
+        }
+    }
+
+    .copertina {
+        position: relative;
+        height: 10rem;
+        overflow: hidden;
+    }
+
+    .copertina :global(img) {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s;
+    }
+
+    .segnaposto {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background: radial-gradient(circle at 50% 50%, var(--superficie-alta) 0%, var(--superficie) 75%);
+        color: var(--serie);
+    }
+
+    .testo {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: var(--spazio-3);
+        padding: var(--spazio-5) var(--spazio-6) var(--spazio-6);
+    }
+
+    h3 {
+        margin: 0;
+        color: var(--serie);
+    }
+
+    p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--testo-tenue);
+    }
+
+    .conteggio {
+        margin-top: auto;
+        font-family: var(--font-titoli);
+        font-size: var(--testo-piccolo);
+        font-weight: 600;
+    }
+</style>

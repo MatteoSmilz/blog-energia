@@ -2,17 +2,28 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/hero/Hero.astro';
 import Scheda from '../components/Scheda.astro';
+import SchedaSerie from '../components/SchedaSerie.astro';
 import RighelloEnergia from '../components/RighelloEnergia.astro';
 import { getArticoli, scegliInEvidenza } from '../lib/articoli';
+import { SERIE, NOMI_SERIE, type InfoSerie } from '../lib/serie';
 import { EVENTI_HOME } from '../data/eventi-energia';
 import { url } from '../lib/url';
 
+const ALTRI_IN_HOME = 4;
+
 const articoli = await getArticoli();
 const inEvidenza = scegliInEvidenza(articoli);
-const altri = articoli.filter((a) => a !== inEvidenza);
+const altri = articoli.filter((a) => a !== inEvidenza).slice(0, ALTRI_IN_HOME);
+const nascosti = articoli.length - (inEvidenza ? 1 : 0) - altri.length;
 
 const primoCellulare = articoli.filter((a) => a.data.serie === 'cellulare').at(-1);
 const inizioViaggio = primoCellulare ? url(`articoli/${primoCellulare.id}`) : url('articoli');
+
+const serie = NOMI_SERIE.map((nome) => ({
+    nome,
+    info: SERIE[nome] as InfoSerie,
+    numeroArticoli: articoli.filter((a) => a.data.serie === nome).length,
+}));
 ---
 
 <Base titolo="Le centrali della natura" headerSovrapposto>
@@ -20,12 +31,9 @@ const inizioViaggio = primoCellulare ? url(`articoli/${primoCellulare.id}`) : ur
         <Fragment slot="introduzione">
             [Una o due frasi tue che presentano il blog e il viaggio attraverso le scale.]
         </Fragment>
-        <Fragment slot="didascalia">
-            Un mitocondrio misura circa un millesimo di millimetro, il Sole quasi un milione e mezzo di chilometri. [La tua frase che li collega.]
-        </Fragment>
     </Hero>
 
-    <section class="energia">
+    <section class="sezione">
         <h2>Quanta energia libera un singolo evento?</h2>
         <RighelloEnergia eventi={EVENTI_HOME}>
             <Fragment slot="didascalia">
@@ -34,33 +42,97 @@ const inizioViaggio = primoCellulare ? url(`articoli/${primoCellulare.id}`) : ur
         </RighelloEnergia>
     </section>
 
-    {inEvidenza && (
-        <Scheda
-            variante="grande"
-            titolo={inEvidenza.data.titolo}
-            href={url(`articoli/${inEvidenza.id}`)}
-            pubblicato={inEvidenza.data.pubblicato}
-            descrizione={inEvidenza.data.descrizione}
-            copertina={inEvidenza.data.copertina}
-            serie={inEvidenza.data.serie}
-        />
-    )}
-    <div class="griglia-schede altri">
-        {altri.map((a) => (
-            <Scheda
-                titolo={a.data.titolo}
-                href={url(`articoli/${a.id}`)}
-                pubblicato={a.data.pubblicato}
-                descrizione={a.data.descrizione}
-                copertina={a.data.copertina}
-                serie={a.data.serie}
-            />
-        ))}
-    </div>
+    <section class="sezione">
+        <div class="intestazione-sezione">
+            <h2>Ultimi articoli</h2>
+            {nascosti > 0 && <a href={url('articoli')}>Tutti gli articoli</a>}
+        </div>
+        {articoli.length === 0 ? (
+            <p class="vuoto">I primi articoli sono in arrivo.</p>
+        ) : (
+            <Fragment>
+                {inEvidenza && (
+                    <Scheda
+                        variante="grande"
+                        titolo={inEvidenza.data.titolo}
+                        href={url(`articoli/${inEvidenza.id}`)}
+                        pubblicato={inEvidenza.data.pubblicato}
+                        descrizione={inEvidenza.data.descrizione}
+                        copertina={inEvidenza.data.copertina}
+                        serie={inEvidenza.data.serie}
+                    />
+                )}
+                {altri.length > 0 && (
+                    <div class="griglia-schede altri">
+                        {altri.map((a) => (
+                            <Scheda
+                                titolo={a.data.titolo}
+                                href={url(`articoli/${a.id}`)}
+                                pubblicato={a.data.pubblicato}
+                                descrizione={a.data.descrizione}
+                                copertina={a.data.copertina}
+                                serie={a.data.serie}
+                            />
+                        ))}
+                    </div>
+                )}
+            </Fragment>
+        )}
+    </section>
+
+    <section class="sezione">
+        <h2>Le serie</h2>
+        <div class="griglia-serie">
+            {serie.map(({ nome, info, numeroArticoli }) => (
+                <SchedaSerie serie={nome} info={info} href={url(`serie/${nome}`)} numeroArticoli={numeroArticoli} />
+            ))}
+        </div>
+    </section>
 </Base>
 
 <style>
+    .sezione {
+        margin-top: var(--spazio-9);
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        & h2 {
+            margin: 0 0 var(--spazio-6);
+        }
+    }
+
+    .intestazione-sezione {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: var(--spazio-3) var(--spazio-5);
+        margin-bottom: var(--spazio-6);
+
+        & h2 {
+            margin: 0;
+        }
+
+        & a {
+            font-family: var(--font-titoli);
+            font-weight: 600;
+            color: var(--accento);
+        }
+    }
+
     .altri {
         margin-top: var(--spazio-5);
+    }
+
+    .griglia-serie {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+        gap: var(--spazio-5);
+    }
+
+    .vuoto {
+        color: var(--testo-tenue);
     }
 </style>
